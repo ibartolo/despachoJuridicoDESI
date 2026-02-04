@@ -158,6 +158,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AutenticationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -174,8 +175,29 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Domain\Common.Domain.csproj">
+      <Project>{32430ac5-c0f5-4aa7-9773-263aa67d5e54}</Project>
+      <Name>Common.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlProxy\SqlProxy.csproj">
+      <Project>{3e912f1b-a544-46a0-be23-aa4d8043125c}</Project>
+      <Name>SqlProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\User.Application\User.Application.csproj">
+      <Project>{e621c36b-886b-47b4-af91-57f79d158e99}</Project>
+      <Name>User.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\User.Domain\User.Domain.csproj">
+      <Project>{f20c3d87-ebe3-417d-88d0-3160e69ca2cc}</Project>
+      <Name>User.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\User.Proxy\User.Proxy.csproj">
+      <Project>{d684bc59-4674-4360-a6ca-d5d0befb7d9c}</Project>
+      <Name>User.Proxy</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{32430AC5-C0F5-4AA7-9773-263AA67D5E54}</ProjectGuid>
+    <ProjectGuid>{D684BC59-4674-4360-A6CA-D5D0BEFB7D9C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.Domain</RootNamespace>
-    <AssemblyName>Common.Domain</AssemblyName>
+    <RootNamespace>User.Proxy</RootNamespace>
+    <AssemblyName>User.Proxy</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,9 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OperationResult.cs" />
+    <Compile Include="IUserProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemMessage.cs" />
+    <Compile Include="UserMapp.cs" />
+    <Compile Include="UserProxy.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SqlProxy\SqlProxy.csproj">
+      <Project>{3E912F1B-A544-46A0-BE23-AA4D8043125C}</Project>
+      <Name>SqlProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\User.Domain\User.Domain.csproj">
+      <Project>{F20C3D87-EBE3-417D-88D0-3160E69CA2CC}</Project>
+      <Name>User.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

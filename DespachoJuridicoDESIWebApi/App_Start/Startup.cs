@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Unity;
+using Unity.Lifetime;
 using Unity.WebApi;
+using User.Application;
+using User.Proxy;
 
 [assembly: OwinStartup(typeof(DespachoJuridicoDESIWebApi.App_Start.Startup))]
 namespace DespachoJuridicoDESIWebApi.App_Start
@@ -29,8 +31,8 @@ namespace DespachoJuridicoDESIWebApi.App_Start
             var container = new UnityContainer();
 
             // Registrar implementaciones concretas
-            //container.RegisterType<IUserProxy, UserProxy>(new HierarchicalLifetimeManager());
-            //container.RegisterType<IUserApp, UserApp>(new HierarchicalLifetimeManager());
+            container.RegisterType<IUserProxy, UserProxy>(new HierarchicalLifetimeManager());
+            container.RegisterType<IUserApp, UserApp>(new HierarchicalLifetimeManager());
 
             // Asignar resolver a Web API
             config.DependencyResolver = new UnityDependencyResolver(container);
