@@ -5,9 +5,7 @@ using System.IO;
 using System.Web.Http;
 using WebActivatorEx;
 
-[assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
-
-namespace DespachoJuridicoDESIWebApi
+namespace DespachoJuridicoDESIWebApi.App_Start
 {
     public static class SwaggerConfig
     {
@@ -15,7 +13,7 @@ namespace DespachoJuridicoDESIWebApi
         {
             config.EnableSwagger(c =>
             {
-                c.SingleApiVersion("v1", "ReporteDeIncidenciasDESI Web API");
+                c.SingleApiVersion("v1", "DespachoJuridicoDESIWebApi Web API");
                 //c.Description("API para reportes de incidencias");
                 var xmlPath = XmlCommentsFilePath();
                 if (!string.IsNullOrEmpty(xmlPath))
@@ -36,7 +34,7 @@ namespace DespachoJuridicoDESIWebApi
             try
             {
                 var basePath = AppDomain.CurrentDomain.BaseDirectory;
-                var fileName = "ReporteDeIncidenciasDESIWebApi.xml";
+                var fileName = "DespachoJuridicoDESIWebApi.xml";
                 var full = Path.Combine(basePath, "bin", fileName);
                 return File.Exists(full) ? full : null;
             }
