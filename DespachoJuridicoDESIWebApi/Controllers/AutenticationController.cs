@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using User.Application;
 using User.Domain;
+using User.Messages;
 
 namespace DespachoJuridicoDESIWebApi.Controllers
 {
@@ -20,10 +21,13 @@ namespace DespachoJuridicoDESIWebApi.Controllers
         }
         [HttpGet]
         [Route("GetUsuarioByCorreo")]
-        public IHttpActionResult GetUsuarioByCorreo(string correo)
+        public IHttpActionResult GetUsuarioByCorreo(UserMassagesRequest request)
         {
-            var result = _userApp.GetUsuarioByCorreo(correo, out var operationResult);
-            return Ok(result);
+            UserMassagesResponse response = new UserMassagesResponse();
+            response.UserObjs = _userApp.GetUsuarioByCorreo(request.email, out var operationResult);
+            response.Result = operationResult;
+
+            return Ok(response);
         }
 
         [HttpGet]

@@ -194,6 +194,10 @@
       <Project>{f20c3d87-ebe3-417d-88d0-3160e69ca2cc}</Project>
       <Name>User.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\User.Messages\User.Messages.csproj">
+      <Project>{2C7F8F0D-209D-4A2C-A896-58CD441707CE}</Project>
+      <Name>User.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\User.Proxy\User.Proxy.csproj">
       <Project>{d684bc59-4674-4360-a6ca-d5d0befb7d9c}</Project>
       <Name>User.Proxy</Name>

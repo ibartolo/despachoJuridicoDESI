@@ -22,7 +22,8 @@ namespace DespachoJuridicoDESIWebApi
             );
 
             var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
-            jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            // Usar DefaultContractResolver para mantener PascalCase (Id, Nombre, ProveedorUserId)
+            jsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
         }
     }
 }
