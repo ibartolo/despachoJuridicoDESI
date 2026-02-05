@@ -19,7 +19,7 @@ namespace DespachoJuridicoDESIWebApi.Controllers
         {
             _userApp = userApp;
         }
-        [HttpGet]
+        [HttpPost]
         [Route("GetUsuarioByCorreo")]
         public IHttpActionResult GetUsuarioByCorreo(UserMassagesRequest request)
         {

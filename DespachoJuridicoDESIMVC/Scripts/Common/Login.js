@@ -60,7 +60,7 @@ $(document).ready(function () {
     // Simular redirección después de login exitoso
     function redirectToDashboard() {
         setTimeout(() => {
-            window.location.href = 'dashboard.html'; // Cambiar por la URL real del dashboard
+            window.location.href = '/Home/Index'; // Cambiar por la URL real del dashboard
         }, 1500);
     }
 
@@ -98,45 +98,49 @@ $(document).ready(function () {
         isProcessing = true;
         setButtonLoading($('#submitLogin'), true);
 
-        // Simular llamada al servidor (en un caso real sería una petición AJAX)
-        setTimeout(() => {
-            // Simulación de credenciales válidas
-            const validCredentials = (
-                (email === 'admin@despachojuridico.com' && password === 'admin123') ||
-                (email === 'abogado@ejemplo.com' && password === 'abogado123')
-            );
+        //// Simular llamada al servidor (en un caso real sería una petición AJAX)
+        //setTimeout(() => {
+        //    // Simulación de credenciales válidas
+        //    const validCredentials = (
+        //        (email === 'admin@despachojuridico.com' && password === 'admin123') ||
+        //        (email === 'abogado@ejemplo.com' && password === 'abogado123')
+        //    );
 
-            if (validCredentials) {
+        //    if (validCredentials) {
+        //        showSuccess('¡Inicio de sesión exitoso! Redirigiendo al dashboard...');
+
+        //        // Guardar preferencia de "recordar sesión" (simulado)
+        //        if (rememberMe) {
+        //            localStorage.setItem('rememberedEmail', email);
+        //        } else {
+        //            localStorage.removeItem('rememberedEmail');
+        //        }
+
+        //        // Redirigir al dashboard
+        //        redirectToDashboard();
+        //    } else {
+        //        showError('Credenciales incorrectas. Por favor, verifica tu correo y contraseña.');
+        //    }
+
+        //    isProcessing = false;
+        //    setButtonLoading($('#submitLogin'), false);
+        //}, 1500);
+
+        var parameter = {
+            email: email,
+            pass: password
+        };
+
+        PostMVC("/Home/AutenticacionUsuario", parameter, function (r) {
+            if (r.Result.Successful) {
                 showSuccess('¡Inicio de sesión exitoso! Redirigiendo al dashboard...');
-
-                // Guardar preferencia de "recordar sesión" (simulado)
-                if (rememberMe) {
-                    localStorage.setItem('rememberedEmail', email);
-                } else {
-                    localStorage.removeItem('rememberedEmail');
-                }
-
-                // Redirigir al dashboard
                 redirectToDashboard();
-            } else {
-                showError('Credenciales incorrectas. Por favor, verifica tu correo y contraseña.');
-            }
-
-            isProcessing = false;
-            setButtonLoading($('#submitLogin'), false);
-        }, 1500);
-
-        PostMVC("/PaymentRequest/SaveOrUpdatePaymentRequest", parameter, function (r) {
-            if (r.IsSuccess) {
-                location.href = "/PaymentRequest/Crud/" + r.Response.id;
             }
             else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Ocurrió un error.',
-                    text: r.Message
-                });
-                //alert(r.Message);
+                //alert(r.Result.SystemMessages[0].Message);
+                showError(r.Result.SystemMessages[0].Message);
+                isProcessing = false;
+                setButtonLoading($('#submitLogin'), false);
             }
         });
     });

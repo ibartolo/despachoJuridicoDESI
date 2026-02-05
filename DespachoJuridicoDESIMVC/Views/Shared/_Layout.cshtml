@@ -1,40 +1,360 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <title>Despacho Jurídico | Dashboard</title>
+
+    <!-- Bootstrap 3 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- CSS General (Template) -->
+    <link href="~/CSS/Common/Template.css" rel="stylesheet" />
+
+    <!-- CSS Específico para Dashboard -->
+    <link href="~/CSS/Home/Dashboard.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <!-- Barra superior -->
+    <nav class="navbar-top">
+        <!-- Lado izquierdo: Logo -->
+        <div class="navbar-left">
+            <!-- Botón hamburguesa para móvil (a la izquierda del logo) -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <!-- Logo -->
+            <div class="logo-container">
+                <img src="https://img.genially.com/63eeeed672cc8d001897dffb/775b7efe-efa0-441b-9c8a-e056dc20afa4.png" alt="Logo Despacho Jurídico" class="logo-img">
+                <span class="logo-text">Despacho Jurídico</span>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+        </div>
+
+        <!-- Lado derecho: Controles de usuario -->
+        <div class="navbar-right">
+            <!-- Botón para colapsar menú en desktop -->
+            <button class="toggle-sidebar" id="toggleSidebar" title="Colapsar/Expandir menú">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <!-- Notificaciones -->
+            <button class="notification-btn" id="notificationBtn">
+                <i class="fa fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+
+            <!-- Perfil de usuario -->
+            <div class="dropdown">
+                <div class="user-profile dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="user-avatar">AJ</div>
+                    <span class="user-name">Abogado Juan</span>
+                    <i class="fa fa-caret-down"></i>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#"><i class="fa fa-user"></i> Mi perfil</a></li>
+                    <li><a href="#"><i class="fa fa-cog"></i> Configuración</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/Home/Autentication"><i class="fa fa-sign-out"></i> Cerrar sesión</a></li>
                 </ul>
             </div>
         </div>
+    </nav>
+
+    <!-- Overlay para móvil -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Menú lateral -->
+    <div class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-gavel"></i>
+                    <span class="menu-text">Casos</span>
+                    <span class="badge">5</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-folder-open"></i>
+                    <span class="menu-text">Expedientes</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-users"></i>
+                    <span class="menu-text">Clientes</span>
+                    <span class="badge">12</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-calendar"></i>
+                    <span class="menu-text">Agenda</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-credit-card"></i>
+                    <span class="menu-text">Pagos</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-bar-chart"></i>
+                    <span class="menu-text">Reportes</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-cogs"></i>
+                    <span class="menu-text">Configuración</span>
+                </a>
+            </li>
+        </ul>
     </div>
 
-    <div class="container body-content">
+    <!-- Contenido principal -->
+    <div class="main-content" id="mainContent">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
 
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
+    <!-- Panel de notificaciones -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h4 class="notification-title">Notificaciones</h4>
+            <button class="btn btn-xs btn-default" id="markAllRead">
+                <i class="fa fa-check"></i> Marcar todas como leídas
+            </button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item unread">
+                <div class="notification-text">
+                    <strong>Recordatorio:</strong> Audiencia programada para mañana a las 10:00 AM
+                </div>
+                <div class="notification-time">Hace 1 hora</div>
+            </div>
+            <div class="notification-item unread">
+                <div class="notification-text">
+                    <strong>Nuevo mensaje:</strong> El cliente Alejandro Martínez ha enviado un mensaje
+                </div>
+                <div class="notification-time">Hace 3 horas</div>
+            </div>
+            <div class="notification-item unread">
+                <div class="notification-text">
+                    <strong>Pago pendiente:</strong> Recordatorio de pago para el caso "Divorcio Sánchez"
+                </div>
+                <div class="notification-time">Ayer, 17:30</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-text">
+                    <strong>Documento firmado:</strong> El contrato con Inmobiliaria Sol ha sido firmado
+                </div>
+                <div class="notification-time">23 de octubre</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-text">
+                    <strong>Cita confirmada:</strong> Reunión con nuevo cliente el viernes 27
+                </div>
+                <div class="notification-time">22 de octubre</div>
+            </div>
+        </div>
+        <div class="notification-footer">
+            <a href="#" class="btn btn-link btn-sm">Ver todas las notificaciones</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap 3 JavaScript y jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript General (Template) -->
+    <script>
+        /* ============================
+           JAVASCRIPT GENERAL (TEMPLATE)
+           ============================ */
+
+        $(document).ready(function () {
+            // Variables de estado
+            let sidebarCollapsed = false;
+            let notificationPanelVisible = false;
+            let isMobile = $(window).width() < 768;
+
+            // Función para ajustar la interfaz según el tamaño de pantalla
+            function adjustLayout() {
+                isMobile = $(window).width() < 768;
+
+                if (isMobile) {
+                    // En móvil: menú completamente oculto
+                    $('#sidebar').removeClass('collapsed').addClass('mobile-hidden');
+                    $('#sidebar').css('left', '-220px');
+                    $('#mainContent').removeClass('expanded');
+                    $('#sidebarOverlay').hide();
+                    $('.mobile-menu-btn').show();
+                } else {
+                    // En desktop: restaurar estado colapsado/no colapsado
+                    $('#sidebar').removeClass('mobile-hidden');
+                    $('.mobile-menu-btn').hide();
+                    $('#sidebarOverlay').hide();
+
+                    if (sidebarCollapsed) {
+                        $('#sidebar').addClass('collapsed');
+                        $('#mainContent').addClass('expanded');
+                        $('#sidebar').css('left', '0');
+                    } else {
+                        $('#sidebar').removeClass('collapsed');
+                        $('#mainContent').removeClass('expanded');
+                        $('#sidebar').css('left', '0');
+                    }
+                }
+            }
+
+            // Ajustar layout al cargar y al redimensionar
+            adjustLayout();
+            $(window).resize(adjustLayout);
+
+            // Toggle del menú lateral en desktop
+            $('#toggleSidebar').click(function () {
+                if (!isMobile) {
+                    // En desktop, colapsar/expandir menú
+                    sidebarCollapsed = !sidebarCollapsed;
+                    $('#sidebar').toggleClass('collapsed');
+                    $('#mainContent').toggleClass('expanded');
+
+                    // Cambiar icono del botón
+                    if (sidebarCollapsed) {
+                        $('#toggleSidebar i').removeClass('fa-bars').addClass('fa-chevron-right');
+                    } else {
+                        $('#toggleSidebar i').removeClass('fa-chevron-right').addClass('fa-bars');
+                    }
+                }
+            });
+
+            // Mostrar menú lateral en móvil
+            $('#mobileMenuBtn').click(function () {
+                $('#sidebar').css('left', '0');
+                $('#sidebarOverlay').show();
+            });
+
+            // Cerrar menú lateral en móvil al hacer clic en overlay
+            $('#sidebarOverlay').click(function () {
+                $('#sidebar').css('left', '-220px');
+                $(this).hide();
+            });
+
+            // Mostrar/ocultar panel de notificaciones
+            $('#notificationBtn').click(function (e) {
+                e.stopPropagation();
+
+                if (notificationPanelVisible) {
+                    $('#notificationPanel').hide();
+                    notificationPanelVisible = false;
+                } else {
+                    // Cerrar otros elementos abiertos
+                    $('.dropdown.open .dropdown-toggle').dropdown('toggle');
+
+                    // Mostrar panel de notificaciones
+                    $('#notificationPanel').show();
+                    notificationPanelVisible = true;
+                }
+            });
+
+            // Marcar todas las notificaciones como leídas
+            $('#markAllRead').click(function () {
+                $('.notification-item').removeClass('unread');
+                $('.notification-badge').text('0');
+                $('#notificationPanel').hide();
+                notificationPanelVisible = false;
+            });
+
+            // Cerrar panel de notificaciones al hacer clic fuera
+            $(document).click(function (e) {
+                if (!$(e.target).closest('#notificationPanel, #notificationBtn').length) {
+                    $('#notificationPanel').hide();
+                    notificationPanelVisible = false;
+                }
+            });
+
+            // Prevenir cierre del panel al hacer clic dentro
+            $('#notificationPanel').click(function (e) {
+                e.stopPropagation();
+            });
+
+            // Activar elemento del menú al hacer clic
+            $('.sidebar-menu li').click(function () {
+                if (isMobile) {
+                    // Cerrar menú en móvil después de seleccionar
+                    $('#sidebar').css('left', '-220px');
+                    $('#sidebarOverlay').hide();
+                }
+
+                $('.sidebar-menu li').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            // Inicializar icono del botón de toggle según estado
+            if (sidebarCollapsed) {
+                $('#toggleSidebar i').removeClass('fa-bars').addClass('fa-chevron-right');
+            }
+        });
+    </script>
+
+    <!-- JavaScript Específico para Dashboard -->
+    <script>
+        /* ===================================
+           JAVASCRIPT ESPECÍFICO PARA DASHBOARD
+           =================================== */
+
+        $(document).ready(function () {
+            // Efecto hover en tarjetas de estadísticas
+            $('.stat-card').hover(
+                function () {
+                    $(this).css('cursor', 'pointer');
+                },
+                function () {
+                    // Sin acción al salir
+                }
+            );
+
+            // Simular datos en tiempo real para las estadísticas
+            function updateStats() {
+                // En una implementación real, aquí se haría una llamada AJAX
+                // para obtener datos actualizados del servidor
+
+                // Simulación de cambio en datos
+                const randomChange = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
+                const currentCases = parseInt($('.stat-card.casos .stat-number').text());
+
+                if (randomChange !== 0 && Math.random() > 0.7) {
+                    // Simular cambio ocasional en casos activos
+                    const newCases = Math.max(0, currentCases + randomChange);
+                    $('.stat-card.casos .stat-number').text(newCases);
+
+                    // Actualizar texto de cambio
+                    const changeText = randomChange > 0 ?
+                        `<i class="fa fa-arrow-up"></i> ${randomChange} nuevo(s) recientemente` :
+                        `<i class="fa fa-arrow-down"></i> ${Math.abs(randomChange)} cerrado(s)`;
+
+                    $('.stat-card.casos .stat-change').html(changeText);
+                }
+            }
+
+            // Actualizar estadísticas cada 30 segundos (simulación)
+            setInterval(updateStats, 30000);
+
+            // Mostrar mensaje de bienvenida
+            setTimeout(function () {
+                console.log("Dashboard cargado correctamente. Bienvenido al sistema de gestión del despacho jurídico.");
+            }, 1000);
+        });
+    </script>
 </body>
 </html>

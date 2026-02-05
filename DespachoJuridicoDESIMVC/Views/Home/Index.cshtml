@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Fila de estadísticas -->
+    <div class="row row-spacing">
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card casos">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Casos Activos</div>
+                <div class="stat-change positive">
+                    <i class="fa fa-arrow-up"></i> 3 nuevos esta semana
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card expedientes">
+                <div class="stat-number">142</div>
+                <div class="stat-label">Expedientes</div>
+                <div class="stat-change positive">
+                    <i class="fa fa-arrow-up"></i> 8% vs mes anterior
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card clientes">
+                <div class="stat-number">58</div>
+                <div class="stat-label">Clientes Activos</div>
+                <div class="stat-change positive">
+                    <i class="fa fa-arrow-up"></i> 5 nuevos este mes
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card pagos">
+                <div class="stat-number">$124,580</div>
+                <div class="stat-label">Ingresos Totales</div>
+                <div class="stat-change positive">
+                    <i class="fa fa-arrow-up"></i> 12% vs mes anterior
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fila de actividades y calendario -->
+    <div class="row row-spacing">
+        <div class="col-md-8">
+            <h3 class="section-title">Actividad Reciente</h3>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon case">
+                        <i class="fa fa-gavel"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Nuevo caso asignado:</strong> "Contrato de arrendamiento - Inmobiliaria Sol"
+                        </div>
+                        <div class="activity-time">Hace 2 horas</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon client">
+                        <i class="fa fa-user-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Nuevo cliente registrado:</strong> María González Rodríguez
+                        </div>
+                        <div class="activity-time">Ayer, 15:30</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon payment">
+                        <i class="fa fa-credit-card"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Pago recibido:</strong> $5,800 del caso "Divorcio López-Martínez"
+                        </div>
+                        <div class="activity-time">Ayer, 11:15</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon calendar">
+                        <i class="fa fa-calendar-check-o"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Audiencia programada:</strong> Juicio laboral "Martínez vs. Empresa XYZ"
+                        </div>
+                        <div class="activity-time">25 de octubre, 10:00 AM</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon case">
+                        <i class="fa fa-file-text"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Documento subido:</strong> Escrito de demanda "Contrato de servicios"
+                        </div>
+                        <div class="activity-time">23 de octubre, 16:45</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <h3 class="section-title">Próximos Eventos</h3>
+            <div class="calendar-card">
+                <div class="calendar-header">
+                    <h4 class="calendar-month">Octubre 2023</h4>
+                </div>
+                <div class="calendar-body">
+                    <div class="event-item">
+                        <div class="event-time">10:00 AM</div>
+                        <div class="event-title">Reunión con cliente: Carlos Ruiz</div>
+                        <div class="event-desc">Discusión de estrategia para caso de propiedad intelectual</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-time">02:30 PM</div>
+                        <div class="event-title">Audiencia: Juicio laboral</div>
+                        <div class="event-desc">Tribunal laboral local - Caso Martínez vs. Empresa XYZ</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-time">04:00 PM</div>
+                        <div class="event-title">Fecha límite: Documentación</div>
+                        <div class="event-desc">Entrega de documentos para caso de divorcio López-Martínez</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-time">Mañana, 09:00 AM</div>
+                        <div class="event-title">Revisión de contratos</div>
+                        <div class="event-desc">Análisis de contratos para nueva empresa cliente</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
