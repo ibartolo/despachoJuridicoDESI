@@ -93,7 +93,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Site.css" />
+    <Content Include="CSS\Common\Template.css" />
     <Content Include="CSS\Common\TemplateLogin.css" />
+    <Content Include="CSS\Home\Dashboard.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Common\Common.js" />
     <Content Include="Scripts\Common\Login.js" />
@@ -125,6 +127,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Autentication.cshtml" />
     <Content Include="Views\Shared\_Autentication.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

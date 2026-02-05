@@ -1,0 +1,194 @@
+﻿/* ==============================
+           CSS ESPECÍFICO PARA DASHBOARD
+           ============================== */
+
+/* Tarjetas de estadísticas */
+.stat-card {
+    background-color: white;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-top: 4px solid var(--color-secundario);
+    margin-bottom: 20px;
+    height: 120px;
+    transition: transform 0.3s;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .stat-card.casos {
+        border-top-color: #3498db;
+    }
+
+    .stat-card.expedientes {
+        border-top-color: #2ecc71;
+    }
+
+    .stat-card.clientes {
+        border-top-color: #9b59b6;
+    }
+
+    .stat-card.pagos {
+        border-top-color: #e74c3c;
+    }
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--color-primario);
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.stat-change {
+    font-size: 12px;
+}
+
+    .stat-change.positive {
+        color: #27ae60;
+    }
+
+    .stat-change.negative {
+        color: #e74c3c;
+    }
+
+/* Sección de actividades recientes */
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-primario);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.activity-list {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.activity-item {
+    padding: 15px;
+    border-bottom: 1px solid var(--color-borde);
+    display: flex;
+    align-items: flex-start;
+}
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+.activity-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+    .activity-icon.case {
+        background-color: rgba(52, 152, 219, 0.15);
+        color: #3498db;
+    }
+
+    .activity-icon.client {
+        background-color: rgba(155, 89, 182, 0.15);
+        color: #9b59b6;
+    }
+
+    .activity-icon.payment {
+        background-color: rgba(46, 204, 113, 0.15);
+        color: #2ecc71;
+    }
+
+    .activity-icon.calendar {
+        background-color: rgba(241, 196, 15, 0.15);
+        color: #f1c40f;
+    }
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-text {
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.activity-time {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Calendario de eventos próximos */
+.calendar-card {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    overflow: hidden;
+    height: 100%;
+}
+
+.calendar-header {
+    background-color: var(--color-primario);
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.calendar-month {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.calendar-body {
+    padding: 15px;
+}
+
+.event-item {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--color-borde);
+}
+
+    .event-item:last-child {
+        border-bottom: none;
+    }
+
+.event-time {
+    font-weight: 600;
+    color: var(--color-secundario);
+    margin-bottom: 3px;
+}
+
+.event-title {
+    margin-bottom: 5px;
+}
+
+.event-desc {
+    font-size: 12px;
+    color: #777;
+}
+
+/* Espaciado para filas */
+.row-spacing {
+    margin-bottom: 30px;
+}
+
+/* Ajuste de logo en sidebar colapsado */
+.sidebar.collapsed .logo-img {
+    height: 30px;
+}

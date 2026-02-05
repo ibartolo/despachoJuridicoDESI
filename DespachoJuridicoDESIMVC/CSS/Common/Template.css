@@ -1,0 +1,368 @@
+﻿/* ========================
+           CSS GENERAL (TEMPLATE)
+           ======================== */
+:root {
+    --color-primario: #2c3e50;
+    --color-secundario: #3498db;
+    --color-accent: #e74c3c;
+    --color-texto: #333;
+    --color-fondo: #f5f7fa;
+    --color-borde: #e1e5eb;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    overflow-x: hidden;
+    font-size: 14px;
+}
+
+/* Barra superior fija */
+.navbar-top {
+    background-color: white;
+    border-bottom: 1px solid var(--color-borde);
+    height: 60px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    padding: 0 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Contenedor izquierdo con logo */
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+/* Logo de la empresa */
+.logo-container {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    transition: all 0.3s;
+}
+
+.logo-img {
+    height: 40px;
+    transition: all 0.3s;
+}
+
+.logo-text {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--color-primario);
+    white-space: nowrap;
+    margin-left: 10px;
+    transition: opacity 0.3s;
+}
+
+/* Botón hamburguesa para móvil */
+.mobile-menu-btn {
+    background: none;
+    border: none;
+    color: var(--color-primario);
+    font-size: 22px;
+    padding: 10px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+/* Menú lateral */
+.sidebar {
+    background-color: var(--color-primario);
+    color: white;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 220px;
+    z-index: 1020;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    box-shadow: 1px 0 5px rgba(0,0,0,0.1);
+}
+
+    .sidebar.collapsed {
+        width: 60px;
+    }
+
+        .sidebar.collapsed .menu-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .logo-text {
+            opacity: 0;
+            width: 0;
+            margin-left: 0;
+        }
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+    .sidebar-menu li {
+        position: relative;
+    }
+
+        .sidebar-menu li a {
+            color: rgba(255,255,255,0.8);
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+            .sidebar-menu li a:hover,
+            .sidebar-menu li.active a {
+                background-color: rgba(255,255,255,0.1);
+                color: white;
+                border-left-color: var(--color-secundario);
+            }
+
+            .sidebar-menu li a i {
+                margin-right: 10px;
+                width: 20px;
+                text-align: center;
+                font-size: 16px;
+            }
+
+            .sidebar-menu li a .badge {
+                position: absolute;
+                right: 15px;
+                top: 12px;
+            }
+
+/* Contenido principal */
+.main-content {
+    margin-top: 60px;
+    margin-left: 220px;
+    padding: 20px;
+    transition: all 0.3s;
+    min-height: calc(100vh - 60px);
+}
+
+    .main-content.expanded {
+        margin-left: 60px;
+    }
+
+/* Contenedor derecho con controles de usuario */
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Controles de usuario */
+.user-controls {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.notification-btn {
+    position: relative;
+    background: none;
+    border: none;
+    color: var(--color-texto);
+    font-size: 18px;
+    margin-right: 15px;
+    padding: 5px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-accent);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+    .user-profile:hover {
+        background-color: rgba(0,0,0,0.05);
+    }
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-secundario);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.user-name {
+    font-weight: 500;
+    margin-right: 8px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dropdown-menu {
+    border-radius: 4px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    border: 1px solid var(--color-borde);
+}
+
+    .dropdown-menu li a {
+        padding: 8px 15px;
+    }
+
+        .dropdown-menu li a i {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+        }
+
+/* Botón para colapsar menú en desktop */
+.toggle-sidebar {
+    background: none;
+    border: none;
+    color: var(--color-texto);
+    font-size: 18px;
+    margin-left: 15px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Panel de notificaciones */
+.notification-panel {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    width: 350px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    z-index: 1060;
+    display: none;
+}
+
+.notification-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--color-borde);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0;
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--color-borde);
+    transition: background-color 0.2s;
+}
+
+    .notification-item:hover {
+        background-color: rgba(0,0,0,0.02);
+    }
+
+    .notification-item.unread {
+        background-color: rgba(52, 152, 219, 0.05);
+    }
+
+.notification-time {
+    font-size: 12px;
+    color: #888;
+    margin-top: 3px;
+}
+
+.notification-footer {
+    padding: 10px 15px;
+    text-align: center;
+    border-top: 1px solid var(--color-borde);
+}
+
+/* Estilos para el overlay en móvil */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1019;
+    display: none;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 220px;
+        left: -220px;
+        top: 60px;
+    }
+
+        .sidebar.mobile-open {
+            left: 0;
+        }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+
+    .toggle-sidebar {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .logo-text {
+        display: none;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .main-content.expanded {
+        margin-left: 0;
+    }
+}
