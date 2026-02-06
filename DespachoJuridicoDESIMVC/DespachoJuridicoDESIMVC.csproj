@@ -93,16 +93,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Site.css" />
+    <Content Include="CSS\Case\Index.css" />
     <Content Include="CSS\Common\Template.css" />
     <Content Include="CSS\Common\TemplateLogin.css" />
     <Content Include="CSS\Home\Dashboard.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Case\Index.js" />
     <Content Include="Scripts\Common\Common.js" />
     <Content Include="Scripts\Common\Login.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\HttpClientBase.cs" />
     <Compile Include="DAL\HttpClientConnection.Autentication.cs" />
@@ -129,6 +132,7 @@
     <Content Include="Views\Home\Autentication.cshtml" />
     <Content Include="Views\Shared\_Autentication.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Case\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
