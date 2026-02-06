@@ -10,7 +10,6 @@ using User.Messages;
 
 namespace DespachoJuridicoDESIWebApi.Controllers
 {
-    [AllowAnonymous]
     [RoutePrefix("api/Autentication")]
     public class AutenticationController : ApiController
     {
@@ -19,6 +18,7 @@ namespace DespachoJuridicoDESIWebApi.Controllers
         {
             _userApp = userApp;
         }
+        [AllowAnonymous]
         [HttpPost]
         [Route("GetUsuarioByCorreo")]
         public IHttpActionResult GetUsuarioByCorreo(UserMassagesRequest request)
@@ -29,7 +29,7 @@ namespace DespachoJuridicoDESIWebApi.Controllers
 
             return Ok(response);
         }
-
+        [Authorize]
         [HttpGet]
         [Route("GetUsuarioByProveedor")]
         public IHttpActionResult GetUsuarioByProveedor(string tipoAutenticacion, string usuarioId)

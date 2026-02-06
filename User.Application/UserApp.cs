@@ -105,5 +105,21 @@ namespace User.Application
                 return null;
             }
         }
+
+        public UserObj AutenticacionParaToken(string correo, string pass)
+        {
+            UserObj userObj = null;
+            try
+            {
+                DataTable responseDT = _proxy.GetUsuarioByCorreo(correo);
+                var userObjList = UserMapp.MappUsuario(responseDT) ?? new List<UserObj>();
+                userObj = userObjList.Where(x => x.PasswordHash.Equals(pass)).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return userObj;
+        }
     }
 }

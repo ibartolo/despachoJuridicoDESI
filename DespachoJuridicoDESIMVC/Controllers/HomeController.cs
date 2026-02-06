@@ -1,5 +1,6 @@
 ﻿using DespachoJuridicoDESIMVC.DAL;
 using DespachoJuridicoDESIMVC.Helpers;
+using DespachoJuridicoDESIMVC.Models.Autentication;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using static DespachoJuridicoDESIMVC.Helpers.FiltersHelper;
 
 namespace DespachoJuridicoDESIMVC.Controllers
 {
@@ -19,11 +21,12 @@ namespace DespachoJuridicoDESIMVC.Controllers
         }
 
         #region Views
+        [NoAutenticated]
         public ActionResult Autentication()
         {
             return View();
         }
-
+        [Autenticated]
         public ActionResult Index()
         {
             return View();
@@ -37,18 +40,32 @@ namespace DespachoJuridicoDESIMVC.Controllers
 
             var passEncrypt = Cryptography.Encrypt(pass);
             var usuarioAutenticado = response.UserObjs.Where(u => u.PasswordHash == passEncrypt).ToList();
-            
+
             if (usuarioAutenticado.Count == 0)
             {
                 response.Result.Successful = false;
                 response.Result.SystemMessages.Add(new Models.Common.SystemMessage()
-                { 
+                {
                     Message = "Error de autenticación. Verifique sus credenciales e intente nuevamente.",
                     MessageType = Models.Common.SystemMessageTypes.Error
                 });
             }
+            else {
+                var userAutenticated = usuarioAutenticado.First();
+                var token = await new HttpClientConnection().GetToken(email, passEncrypt);
+                token.ExpirationDate = DateTime.Now.AddSeconds(token.expires_in);
 
-            return JsonConvert.SerializeObject(response);
+                var tokenCookie = new TokenCookie()
+                {
+                    Token = token,
+                    UserID = userAutenticated.Id,
+                    UserName = userAutenticated.Correo
+                };
+
+                SessionHelper.CreateSession(JsonConvert.SerializeObject(tokenCookie));
+            }
+
+                return JsonConvert.SerializeObject(response);
         }
         #endregion
     }

@@ -111,6 +111,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CryptographyHelper.cs" />
+    <Compile Include="Helpers\FiltersHelper.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
     <Compile Include="Models\Autentication\Token.cs" />
     <Compile Include="Models\Autentication\TokenCookie.cs" />
