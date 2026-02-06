@@ -14,5 +14,6 @@ namespace User.Application
         List<UserObj> GetUsuarioByProveedor(string tipoAutenticacion, string usuarioId, out OperationResult result);
         DateTime DeleteUsuario(long id, out OperationResult result);
         UserObj SaveOrUpdateUsuario(UserObj usuario, out OperationResult result);
+        UserObj AutenticacionParaToken(string correo, string pass);
     }
 }

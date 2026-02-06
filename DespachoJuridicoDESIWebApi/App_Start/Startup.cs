@@ -18,6 +18,9 @@ namespace DespachoJuridicoDESIWebApi.App_Start
 {
     public class Startup
     {
+        // Exponer el contenedor para que el provider pueda resolver dependencias
+        public static IUnityContainer Container { get; private set; }
+
         public void Configuration(IAppBuilder app)
         {
             HttpConfiguration config = new HttpConfiguration();
@@ -29,6 +32,7 @@ namespace DespachoJuridicoDESIWebApi.App_Start
 
             // ---- Configurar DI con Unity ----
             var container = new UnityContainer();
+            Container = container;
 
             // Registrar implementaciones concretas
             container.RegisterType<IUserProxy, UserProxy>(new HierarchicalLifetimeManager());
@@ -51,7 +55,7 @@ namespace DespachoJuridicoDESIWebApi.App_Start
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+                AccessTokenExpireTimeSpan = TimeSpan.FromHours(6),
                 Provider = new SimpleAuthorizationServerProvider()
             };
 
@@ -74,8 +78,38 @@ namespace DespachoJuridicoDESIWebApi.App_Start
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
 
-            context.SetError("invalid_grant", "The user name or password is incorrect.");
-            return;
+            // Intentar resolver IUserApp desde el contenedor público; si no está, usar el DependencyResolver global
+            IUserApp userApp = null;
+            try
+            {
+                if (Startup.Container != null)
+                {
+                    userApp = Startup.Container.Resolve<IUserApp>();
+                }
+                else
+                {
+                    userApp = System.Web.Http.GlobalConfiguration.Configuration
+                        .DependencyResolver.GetService(typeof(IUserApp)) as IUserApp;
+                }
+            }
+            catch
+            {
+                userApp = null;
+            }
+
+            if (userApp == null)
+            {
+                context.SetError("invalid_grant", "Error interno: no se pudo validar al usuario.");
+                return;
+            }
+
+            // Llamar a AutenticacionParaToken con usuario y contraseña
+            var user = userApp.AutenticacionParaToken(context.UserName, context.Password);
+            if (user == null)
+            {
+                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                return;
+            }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim("sub", context.UserName));
