@@ -122,6 +122,8 @@
     <Compile Include="Models\Autentication\Token.cs" />
     <Compile Include="Models\Autentication\TokenCookie.cs" />
     <Compile Include="Models\Autentication\UserObj.cs" />
+    <Compile Include="Models\Case\CaseObj.cs" />
+    <Compile Include="Models\Case\StatusCaseObj.cs" />
     <Compile Include="Models\Customer\ClientObj.cs" />
     <Compile Include="Models\Messages\ClientMessages.cs" />
     <Compile Include="Models\Messages\UserMassages.cs" />
