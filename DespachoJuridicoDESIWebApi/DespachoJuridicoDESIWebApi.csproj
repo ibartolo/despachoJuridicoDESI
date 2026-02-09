@@ -159,6 +159,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AutenticationController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -181,6 +182,18 @@
     <ProjectReference Include="..\Common.Domain\Common.Domain.csproj">
       <Project>{32430ac5-c0f5-4aa7-9773-263aa67d5e54}</Project>
       <Name>Common.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Customer.Application\Customer.Application.csproj">
+      <Project>{645725B2-5EC1-45DF-9FF9-FB04D5A5569A}</Project>
+      <Name>Customer.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Customer.Domain\Customer.Domain.csproj">
+      <Project>{A5166C66-7B79-459D-A490-72145CF74268}</Project>
+      <Name>Customer.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Customer.Proxy\Customer.Proxy.csproj">
+      <Project>{545C903A-5A32-49EB-8B96-E3BD6E0B78C4}</Project>
+      <Name>Customer.Proxy</Name>
     </ProjectReference>
     <ProjectReference Include="..\SqlProxy\SqlProxy.csproj">
       <Project>{3e912f1b-a544-46a0-be23-aa4d8043125c}</Project>
