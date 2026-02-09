@@ -12,13 +12,8 @@ using static DespachoJuridicoDESIMVC.Helpers.FiltersHelper;
 
 namespace DespachoJuridicoDESIMVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private HttpClientConnection httpClient;
-        public HomeController()
-        {
-            httpClient = new HttpClientConnection();
-        }
 
         #region Views
         [NoAutenticated]

@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/2.3.7/js/dataTables.js"></script>
+
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table" id="tblClientes">
+        </table>
+    </div>
+</div>
+
+<script>
+    var tbl;
+    var arrayItems;
+
+    $(document).ready(function () {
+        GetAllCustomer();
+    });
+
+    function GetAllCustomer() {
+        GetMVC("/Customer/GetAllClientes", function (r) {
+            if (r.Result.Successful) {
+                arrayItems = r.ClientObjs;
+                tbl = $("#tblClientes").DataTable(
+                    {
+                        data: arrayItems,
+                        columns: [
+                            { data: "Id", title: "Id" },
+                            { data: "Nombre", title: "Nombre" },
+                            { data: "Telefono", title: "Teléfono" },
+                            { data: "Correo", title: "Email" },
+                            {
+                                data: "Id", render: function (data) {
+                                    return '<input type="button" value="Editar" class="btn btn-primary" onclick="EditCustomer(' + data + ')" />'
+                                }
+                            }
+                        ]
+                    });
+            }
+            else {
+
+                alert(r.Message);
+            }
+        });
+    }
+
+    function EditCustomer(id) {
+        window.location.href = "/Customer/Create/" + id;
+    }
+</script>
