@@ -191,6 +191,10 @@
       <Project>{A5166C66-7B79-459D-A490-72145CF74268}</Project>
       <Name>Customer.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Customer.Messages\Customer.Messages.csproj">
+      <Project>{18FA4410-9EEC-4631-B179-6B01ED5998AA}</Project>
+      <Name>Customer.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Customer.Proxy\Customer.Proxy.csproj">
       <Project>{545C903A-5A32-49EB-8B96-E3BD6E0B78C4}</Project>
       <Name>Customer.Proxy</Name>

@@ -1,5 +1,6 @@
 ﻿using Customer.Application;
 using Customer.Domain;
+using Customer.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Web.Http;
 
 namespace DespachoJuridicoDESIWebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/Customer")]
     public class CustomerController : ApiController
     {
@@ -20,36 +21,52 @@ namespace DespachoJuridicoDESIWebApi.Controllers
             _clientApp = clientApp;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllClientes")]
         public IHttpActionResult GetAllClientes()
         {
-            var result = _clientApp.GetAllClientes(out var operationResult);
-            return Ok(result);
+            ClientMassagesResponse response = new ClientMassagesResponse();
+            response.ClientObjs = _clientApp.GetAllClientes(out var operationResult);
+            response.Result = operationResult;
+            return Ok(response);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetClienteById")]
-        public IHttpActionResult GetClienteById(long id)
+        public IHttpActionResult GetClienteById(GetClienteByIdRequest request)
         {
-            var result = _clientApp.GetClienteById(id, out var operationResult);
-            return Ok(result);
+            ClientMassagesResponse response = new ClientMassagesResponse();
+            response.ClientObjs = new List<ClientObj>();
+            var cliente = _clientApp.GetClienteById(request.Id, out var operationResult);
+            if (cliente != null)
+                response.ClientObjs.Add(cliente);
+            response.Result = operationResult;
+            return Ok(response);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("DeleteCliente")]
-        public IHttpActionResult DeleteCliente(long id)
+        public IHttpActionResult DeleteCliente(DeleteClienteRequest request)
         {
-            var result = _clientApp.DeleteCliente(id, out var operationResult);
-            return Ok(result);
+            var response = new
+            {
+                DeletedDt = _clientApp.DeleteCliente(request.Id, out var operationResult),
+                Result = operationResult
+            };
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("SaveOrUpdateCliente")]
-        public IHttpActionResult SaveOrUpdateCliente(ClientObj cliente)
+        public IHttpActionResult SaveOrUpdateCliente(SaveOrUpdateClienteRequest request)
         {
-            var result = _clientApp.SaveOrUpdateCliente(cliente, out var operationResult);
-            return Ok(result);
+            ClientMassagesResponse response = new ClientMassagesResponse();
+            response.ClientObjs = new List<ClientObj>();
+            var cliente = _clientApp.SaveOrUpdateCliente(request.Cliente, out var operationResult);
+            if (cliente != null)
+                response.ClientObjs.Add(cliente);
+            response.Result = operationResult;
+            return Ok(response);
         }
     }
 }

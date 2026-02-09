@@ -105,11 +105,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CaseController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\HttpClientBase.cs" />
     <Compile Include="DAL\HttpClientConnection.Autentication.cs" />
     <Compile Include="DAL\HttpClientConnection.cs" />
+    <Compile Include="DAL\HttpClientConnection.Customer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -119,6 +122,8 @@
     <Compile Include="Models\Autentication\Token.cs" />
     <Compile Include="Models\Autentication\TokenCookie.cs" />
     <Compile Include="Models\Autentication\UserObj.cs" />
+    <Compile Include="Models\Customer\ClientObj.cs" />
+    <Compile Include="Models\Messages\ClientMessages.cs" />
     <Compile Include="Models\Messages\UserMassages.cs" />
     <Compile Include="Models\Common\OperationResult.cs" />
     <Compile Include="Models\Common\SystemMessage.cs" />
@@ -133,6 +138,8 @@
     <Content Include="Views\Shared\_Autentication.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Case\Index.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Customer\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -142,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

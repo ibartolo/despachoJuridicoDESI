@@ -140,3 +140,52 @@
         </div>
     </div>
 </div>
+<!-- JavaScript Específico para Dashboard -->
+<script>
+        /* ===================================
+           JAVASCRIPT ESPECÍFICO PARA DASHBOARD
+           =================================== */
+
+        $(document).ready(function () {
+            // Efecto hover en tarjetas de estadísticas
+            $('.stat-card').hover(
+                function () {
+                    $(this).css('cursor', 'pointer');
+                },
+                function () {
+                    // Sin acción al salir
+                }
+            );
+
+            // Simular datos en tiempo real para las estadísticas
+            function updateStats() {
+                // En una implementación real, aquí se haría una llamada AJAX
+                // para obtener datos actualizados del servidor
+
+                // Simulación de cambio en datos
+                const randomChange = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
+                const currentCases = parseInt($('.stat-card.casos .stat-number').text());
+
+                if (randomChange !== 0 && Math.random() > 0.7) {
+                    // Simular cambio ocasional en casos activos
+                    const newCases = Math.max(0, currentCases + randomChange);
+                    $('.stat-card.casos .stat-number').text(newCases);
+
+                    // Actualizar texto de cambio
+                    const changeText = randomChange > 0 ?
+                        `<i class="fa fa-arrow-up"></i> ${randomChange} nuevo(s) recientemente` :
+                        `<i class="fa fa-arrow-down"></i> ${Math.abs(randomChange)} cerrado(s)`;
+
+                    $('.stat-card.casos .stat-change').html(changeText);
+                }
+            }
+
+            // Actualizar estadísticas cada 30 segundos (simulación)
+            setInterval(updateStats, 30000);
+
+            // Mostrar mensaje de bienvenida
+            setTimeout(function () {
+                console.log("Dashboard cargado correctamente. Bienvenido al sistema de gestión del despacho jurídico.");
+            }, 1000);
+        });
+</script>
