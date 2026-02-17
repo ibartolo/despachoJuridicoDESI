@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Catalog.Proxy
 {
-    public interface ICatalogProxi
+    public class CatalogMapp
     {
+        
 
     }
 }
