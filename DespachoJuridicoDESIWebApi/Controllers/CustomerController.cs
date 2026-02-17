@@ -22,7 +22,7 @@ namespace DespachoJuridicoDESIWebApi.Controllers
         }
 
         [HttpPost]
-        [Route("GetAllClientes")]
+        [Route("List")]
         public IHttpActionResult GetAllClientes()
         {
             ClientMassagesResponse response = new ClientMassagesResponse();
@@ -32,7 +32,7 @@ namespace DespachoJuridicoDESIWebApi.Controllers
         }
 
         [HttpPost]
-        [Route("GetClienteById")]
+        [Route("First")]
         public IHttpActionResult GetClienteById(GetClienteByIdRequest request)
         {
             ClientMassagesResponse response = new ClientMassagesResponse();
@@ -57,8 +57,8 @@ namespace DespachoJuridicoDESIWebApi.Controllers
         }
 
         [HttpPost]
-        [Route("SaveOrUpdateCliente")]
-        public IHttpActionResult SaveOrUpdateCliente(SaveOrUpdateClienteRequest request)
+        [Route("")]
+        public IHttpActionResult SaveOrUpdateCliente([FromBody] SaveOrUpdateClienteRequest request)
         {
             ClientMassagesResponse response = new ClientMassagesResponse();
             response.ClientObjs = new List<ClientObj>();

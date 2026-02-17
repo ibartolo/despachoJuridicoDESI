@@ -1,4 +1,5 @@
-﻿using DespachoJuridicoDESIMVC.Models.Messages;
+﻿using DespachoJuridicoDESIMVC.Models.Customer;
+using DespachoJuridicoDESIMVC.Models.Messages;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,43 @@ namespace DespachoJuridicoDESIMVC.DAL
     {
         public async Task<ClientMassagesResponse> GetAllClientes()
         {
-            var result = await RequestAsync<object>("api/Customer/GetAllClientes", HttpMethod.Post, null,
+            var result = await RequestAsync<object>("api/Customer/List", HttpMethod.Post, null,
+                new Func<string, string>((responseString) =>
+                {
+                    return responseString;
+                }), token.Token.access_token);
+
+            var response = JsonConvert.DeserializeObject<ClientMassagesResponse>(result.ToString());
+
+            return response;
+        }
+        public async Task<ClientMassagesResponse> GetClienteById(long id)
+        {
+            var request = new
+            {
+                Id = id
+            };
+
+            var result = await RequestAsync<object>("api/Customer/First", HttpMethod.Post, request,
+                new Func<string, string>((responseString) =>
+                {
+                    return responseString;
+                }), token.Token.access_token);
+
+            var response = JsonConvert.DeserializeObject<ClientMassagesResponse>(result.ToString());
+
+            return response;
+        }
+        public async Task<ClientMassagesResponse> SaveOrUpdateCliente(ClientObj client)
+        {
+            MapAuditFields(client);
+
+            var request = new SaveOrUpdateClienteRequest()
+            { 
+                Cliente  = client
+            };
+
+            var result = await RequestAsync<object>("api/Customer", HttpMethod.Post, request,
                 new Func<string, string>((responseString) =>
                 {
                     return responseString;

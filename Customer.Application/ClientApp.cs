@@ -1,5 +1,6 @@
 ﻿using Common.Domain;
 using Customer.Domain;
+using Customer.Messages;
 using Customer.Proxy;
 using System;
 using System.Collections.Generic;
@@ -75,7 +76,7 @@ namespace Customer.Application
             }
         }
 
-        public ClientObj SaveOrUpdateCliente(ClientObj cliente, out OperationResult result)
+        public ClientObj SaveOrUpdateCliente(ClientEntity cliente, out OperationResult result)
         {
             result = new OperationResult { Successful = true };
             try

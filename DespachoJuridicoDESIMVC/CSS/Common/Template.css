@@ -366,3 +366,34 @@ body {
         margin-left: 0;
     }
 }
+
+/* jQuery Validate error labels */
+label.error,
+label.error[for] {
+    color: var(--color-accent);
+    font-weight: 700;
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+/* If another .error class conflicts, this more specific rule ensures labels get styled */
+form label.error {
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+/* estilos para validación del servidor (ValidationSummary y mensajes por campo) */
+.validation-summary-errors,
+.validation-summary-valid {
+    color: var(--color-accent);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.field-validation-error {
+    color: var(--color-accent);
+    font-weight: 700;
+    display: block;
+    margin-top: 5px;
+}

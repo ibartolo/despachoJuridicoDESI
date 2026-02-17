@@ -1,6 +1,7 @@
 ﻿using DespachoJuridicoDESIMVC.DAL;
 using DespachoJuridicoDESIMVC.Helpers;
 using DespachoJuridicoDESIMVC.Models.Autentication;
+using DespachoJuridicoDESIMVC.Models.Customer;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,15 @@ namespace DespachoJuridicoDESIMVC.Controllers
     [Autenticated]
     public class CustomerController : BaseController
     {
-        public ActionResult Create()
+        public async Task<ActionResult> Create(long id = 0)
         {
-            return View();
+            var response = await httpClient.GetClienteById(id);
+            if (response?.Result?.Successful == true && response.ClientObjs != null && response.ClientObjs.Count == 1)
+            {
+                return View(response.ClientObjs.FirstOrDefault());
+            }
+
+            return View(new ClientObj());
         }
         public ActionResult Index()
         {
@@ -31,6 +38,45 @@ namespace DespachoJuridicoDESIMVC.Controllers
             var response = await httpClient.GetAllClientes();
 
             return JsonConvert.SerializeObject(response);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SaveOrUpdateCliente(ClientObj client)
+        {
+            if (client == null)
+            {
+                ModelState.AddModelError(string.Empty, "Datos de cliente inválidos.");
+                return View("Create");
+            }
+
+            try
+            {
+                var response = await httpClient.SaveOrUpdateCliente(client);
+
+                if (response?.Result?.Successful == true)
+                {
+                    return RedirectToAction("Create");
+                }
+
+                if (response?.Result?.SystemMessages != null && response.Result.SystemMessages.Any())
+                {
+                    foreach (var msg in response.Result.SystemMessages)
+                    {
+                        ModelState.AddModelError(string.Empty, msg?.Message ?? "Error desconocido.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Ocurrió un error al guardar el cliente.");
+                }
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Ocurrió un error al guardar el cliente. Intente nuevamente más tarde.");
+            }
+
+            return View("Create", client);
         }
         #endregion
     }

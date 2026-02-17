@@ -8,28 +8,37 @@
 
 <div class="row">
     <div class="col-md-12">
-        @using (Html.BeginForm("SaveOrupdateCustomer", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", @name = "frmCustomerCrud", @id = "frmCustomerCrud" }))
+        @using (Html.BeginForm("SaveOrUpdateCliente", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", @name = "frmCustomerCrud", @id = "frmCustomerCrud" }))
         {
+            @Html.AntiForgeryToken()
+
             @Html.HiddenFor(x => x.Id)
             @Html.HiddenFor(x => x.CreatedBy)
             @Html.HiddenFor(x => x.CreatedDt)
             @Html.HiddenFor(x => x.Estatus)
 
-            <dvi class="row">
+            @* Mostrar errores del servidor (ModelState) *@
+            @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors text-danger", role = "alert" })
+
+            <div class="row">
                 <div class="col-md-4">
                     <label>Nombre:</label>
                     @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Nombre del cliente" })
+                    @Html.ValidationMessageFor(x => x.Nombre, "", new { @class = "field-validation-error" })
                 </div>
                 <div class="col-md-4">
                     <label>Teléfono:</label>
                     @Html.TextBoxFor(x => x.Telefono, new { @class = "form-control", @placeholder = "Teléfono del cliente" })
+                    @Html.ValidationMessageFor(x => x.Telefono, "", new { @class = "field-validation-error" })
                 </div>
                 <div class="col-md-4">
                     <label>Correo electrónico:</label>
                     @Html.TextBoxFor(x => x.Correo, new { @class = "form-control", @placeholder = "Correo electrónico del cliente" })
+                    @Html.ValidationMessageFor(x => x.Correo, "", new { @class = "field-validation-error" })
                 </div>
-            </dvi>
-            <div class="row">
+            </div>
+
+            <div class="row" style="margin-top:15px;">
                 <div class="col-md-12">
                     <input type="submit" value="Guardar" class="btn btn-success" />
                     <a href="/Customer/Index" class="btn btn-warning">Cancelar</a>
