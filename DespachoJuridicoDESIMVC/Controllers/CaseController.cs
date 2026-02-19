@@ -48,7 +48,6 @@ namespace DespachoJuridicoDESIMVC.Controllers
                 }
             }
 
-
             ViewBag.EstatusCaso = listItemsEstatus;
             ViewBag.Clientes = listItemsCleintes;
             return View(new CaseObj());

@@ -14,5 +14,11 @@ namespace Case.Application
         StatusCaseObj GetStatusCaseById(long id, out OperationResult result);
         DateTime DeleteStatusCase(long id, out OperationResult result);
         StatusCaseObj SaveOrUpdateStatusCase(StatusCaseObj statusCase, out OperationResult result);
+
+        List<CaseObj> GetAllCases(out OperationResult result);
+        CaseObj GetCaseById(long id, out OperationResult result);
+        List<CaseObj> GetCasesByClientId(long clientId, out OperationResult result);
+        DateTime DeleteCase(long id, out OperationResult result);
+        CaseObj SaveOrUpdateCase(CaseObj caseObj, out OperationResult result);
     }
 }

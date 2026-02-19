@@ -30,5 +30,34 @@ namespace Case.Messages
         {
             public StatusCaseObj StatusCase { get; set; }
         }
+
+
+
+
+        public class CaseMessagesResponse
+        {
+            public List<CaseObj> CaseObjs { get; set; }
+            public OperationResult Result { get; set; }
+        }
+
+        public class GetCaseByIdRequest
+        {
+            public long Id { get; set; }
+        }
+
+        public class GetCaseByClientIdRequest
+        {
+            public long ClientId { get; set; }
+        }
+
+        public class DeleteCaseRequest
+        {
+            public long Id { get; set; }
+        }
+
+        public class SaveOrUpdateCaseRequest
+        {
+            public CaseObj Case { get; set; }
+        }
     }
 }

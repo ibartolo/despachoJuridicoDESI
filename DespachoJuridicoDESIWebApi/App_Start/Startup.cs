@@ -48,6 +48,8 @@ namespace DespachoJuridicoDESIWebApi.App_Start
             container.RegisterType<IStatusCaseProxy, StatusCaseProxy>(new HierarchicalLifetimeManager());
             container.RegisterType<ICaseApp, CaseApp>(new HierarchicalLifetimeManager());
 
+            container.RegisterType<ICaseProxy, CaseProxy>(new HierarchicalLifetimeManager());
+
             // Asignar resolver a Web API
             config.DependencyResolver = new UnityDependencyResolver(container);
             // ----------------------------------

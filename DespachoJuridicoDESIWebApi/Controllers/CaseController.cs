@@ -30,7 +30,6 @@ namespace DespachoJuridicoDESIWebApi.Controllers
             response.Result = operationResult;
             return Ok(response);
         }
-
         [HttpPost]
         [Route("StatusCase/First")]
         public IHttpActionResult GetById(GetStatusCaseByIdRequest request)
@@ -43,7 +42,6 @@ namespace DespachoJuridicoDESIWebApi.Controllers
             response.Result = operationResult;
             return Ok(response);
         }
-
         [HttpDelete]
         [Route("StatusCase")]
         public IHttpActionResult Delete(DeleteStatusCaseRequest request)
@@ -55,7 +53,6 @@ namespace DespachoJuridicoDESIWebApi.Controllers
             };
             return Ok(response);
         }
-
         [HttpPost]
         [Route("StatusCase")]
         public IHttpActionResult SaveOrUpdate(SaveOrUpdateStatusCaseRequest request)
@@ -65,6 +62,66 @@ namespace DespachoJuridicoDESIWebApi.Controllers
             var item = _caseApp.SaveOrUpdateStatusCase(request.StatusCase, out var operationResult);
             if (item != null)
                 response.StatusCaseObjs.Add(item);
+            response.Result = operationResult;
+            return Ok(response);
+        }
+
+
+
+        [HttpPost]
+        [Route("List")]
+        public IHttpActionResult GetAllCases()
+        {
+            CaseMessagesResponse response = new CaseMessagesResponse();
+            response.CaseObjs = _caseApp.GetAllCases(out var operationResult);
+            response.Result = operationResult;
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("First")]
+        public IHttpActionResult GetCaseById(GetCaseByIdRequest request)
+        {
+            CaseMessagesResponse response = new CaseMessagesResponse();
+            response.CaseObjs = new List<CaseObj>();
+            var item = _caseApp.GetCaseById(request.Id, out var operationResult);
+            if (item != null)
+                response.CaseObjs.Add(item);
+            response.Result = operationResult;
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("Cliente")]
+        public IHttpActionResult GetCasesByClientId(GetCaseByClientIdRequest request)
+        {
+            CaseMessagesResponse response = new CaseMessagesResponse();
+            response.CaseObjs = _caseApp.GetCasesByClientId(request.ClientId, out var operationResult);
+            response.Result = operationResult;
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("")]
+        public IHttpActionResult DeleteCase(DeleteCaseRequest request)
+        {
+            var response = new
+            {
+                DeletedDt = _caseApp.DeleteCase(request.Id, out var operationResult),
+                Result = operationResult
+            };
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("")]
+        public IHttpActionResult SaveOrUpdateCase(SaveOrUpdateCaseRequest request)
+        {
+            CaseMessagesResponse response = new CaseMessagesResponse();
+            response.CaseObjs = new List<CaseObj>();
+            var item = _caseApp.SaveOrUpdateCase(request.Case, out var operationResult);
+            if (item != null)
+                response.CaseObjs.Add(item);
             response.Result = operationResult;
             return Ok(response);
         }
