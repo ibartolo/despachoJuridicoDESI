@@ -17,6 +17,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
     [Autenticated]
     public class CustomerController : BaseController
     {
+        #region Views
         public async Task<ActionResult> Create(long id = 0)
         {
             var response = await httpClient.GetClienteById(id);
@@ -31,6 +32,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
         {
             return View();
         }
+        #endregion
 
         #region Data Access
         public async Task<string> GetAllClientes()

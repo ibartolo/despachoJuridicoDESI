@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Case.Proxy
 {
-    internal class StatusCaseProxy : DbWrapper, IStatusCaseProxy
+    public class StatusCaseProxy : DbWrapper, IStatusCaseProxy
     {
         public DataTable GetAllEstatusCaso()
         {

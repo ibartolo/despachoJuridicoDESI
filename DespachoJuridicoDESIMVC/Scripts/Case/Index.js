@@ -109,25 +109,25 @@ $(document).ready(function () {
         $('#btnEliminar').hide();
 
         // Generar número de caso automático
-        generarNumeroCaso();
+        //generarNumeroCaso();
 
         // Enfocar primer campo
         $('#numeroCaso').focus();
     }
 
     // Generar número de caso automático
-    function generarNumeroCaso() {
-        const fecha = new Date();
-        const year = fecha.getFullYear();
-        const month = String(fecha.getMonth() + 1).padStart(2, '0');
-        const day = String(fecha.getDate()).padStart(2, '0');
+    //function generarNumeroCaso() {
+    //    const fecha = new Date();
+    //    const year = fecha.getFullYear();
+    //    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+    //    const day = String(fecha.getDate()).padStart(2, '0');
 
-        // Generar número secuencial (en un caso real vendría del servidor)
-        const randomNum = Math.floor(Math.random() * 999) + 1;
-        const numeroCaso = `C-${year}-${month}${day}-${String(randomNum).padStart(3, '0')}`;
+    //    // Generar número secuencial (en un caso real vendría del servidor)
+    //    const randomNum = Math.floor(Math.random() * 999) + 1;
+    //    const numeroCaso = `C-${year}-${month}${day}-${String(randomNum).padStart(3, '0')}`;
 
-        $('#numeroCaso').val(numeroCaso);
-    }
+    //    $('#numeroCaso').val(numeroCaso);
+    //}
 
     // Cargar combobox de clientes
     function cargarClientes() {
@@ -334,9 +334,9 @@ $(document).ready(function () {
     });
 
     // Botón: Generar número de caso
-    $('#btnGenerarNumero').click(function () {
-        generarNumeroCaso();
-    });
+    //$('#btnGenerarNumero').click(function () {
+    //    generarNumeroCaso();
+    //});
 
     // Botón: Buscar cliente
     $('#btnBuscarCliente').click(function () {

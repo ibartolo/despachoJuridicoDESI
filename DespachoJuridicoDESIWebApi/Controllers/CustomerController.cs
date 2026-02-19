@@ -10,7 +10,7 @@ using System.Web.Http;
 
 namespace DespachoJuridicoDESIWebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/Customer")]
     public class CustomerController : ApiController
     {
@@ -44,8 +44,8 @@ namespace DespachoJuridicoDESIWebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
-        [Route("DeleteCliente")]
+        [HttpDelete]
+        [Route("")]
         public IHttpActionResult DeleteCliente(DeleteClienteRequest request)
         {
             var response = new

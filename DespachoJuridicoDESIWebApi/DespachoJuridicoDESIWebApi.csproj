@@ -159,6 +159,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AutenticationController.cs" />
+    <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -179,6 +180,22 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Case.Application\Case.Application.csproj">
+      <Project>{3560C5CE-FAF6-4A6C-8117-35FF37593FF2}</Project>
+      <Name>Case.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Case.Domain\Case.Domain.csproj">
+      <Project>{A9813BD1-C657-443D-A029-1535CFEF2F42}</Project>
+      <Name>Case.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Case.Messages\Case.Messages.csproj">
+      <Project>{5111F77E-2719-4581-8D3C-6C3DBA169FA6}</Project>
+      <Name>Case.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Case.Proxy\Case.Proxy.csproj">
+      <Project>{66AE9E6F-CE95-4A65-B47A-1D70A4BE8AB8}</Project>
+      <Name>Case.Proxy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common.Domain\Common.Domain.csproj">
       <Project>{32430ac5-c0f5-4aa7-9773-263aa67d5e54}</Project>
       <Name>Common.Domain</Name>

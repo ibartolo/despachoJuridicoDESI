@@ -38,12 +38,6 @@
                                     @maxlength = "100",
                                     @readonly = Model.Id > 0 ? "readonly" : null
                                 })
-                                @if (Model.Id == 0)
-                                {
-                                    <button type="button" class="btn btn-default" id="btnGenerarNumero" title="Generar automático">
-                                        <i class="fa fa-refresh"></i>
-                                    </button>
-                                }
                             </div>
                             @Html.ValidationMessageFor(x => x.NumeroCaso, "", new { @class = "text-danger" })
                         </div>
@@ -54,7 +48,6 @@
                         <div class="form-group">
                             <label>Cliente *</label>
                             <div class="input-icon">
-                                <i class="fa fa-user"></i>
                                 @*@Html.DropDownListFor(x => x.Customer,
                                     ViewBag.Clientes as SelectList,
                                     "Seleccionar cliente...",
@@ -70,7 +63,6 @@
                         <div class="form-group">
                             <label>Estatus del Caso *</label>
                             <div class="input-icon">
-                                <i class="fa fa-flag"></i>
                                 @*@Html.DropDownListFor(x => x.EstatusCaso,
                                     ViewBag.EstatusCaso as SelectList,
                                     "Seleccionar estatus...",
@@ -91,7 +83,7 @@
                             {
                                 @class = "form-control",
                                 @placeholder = "Describe los detalles del caso legal...",
-                                @rows = "3",
+                                @rows = "10",
                                 @maxlength = "500"
                             })
                             <div class="text-right char-counter">
@@ -112,7 +104,6 @@
                         <div class="form-group">
                             <label>Monto Inicial *</label>
                             <div class="currency-input">
-                                <span class="currency-symbol">$</span>
                                 @Html.TextBoxFor(x => x.MontoInicial, new
                                 {
                                     @class = "form-control",
@@ -130,7 +121,7 @@
 
             <!-- Botones de Acción -->
             <div class="form-actions">
-                <a href="@Url.Action("Index", "Caso")" class="btn btn-default">
+                <a href="@Url.Action("Index", "Case")" class="btn btn-default">
                     <i class="fa fa-times"></i> Cancelar
                 </a>
                 @if (Model.Id > 0)

@@ -1,4 +1,5 @@
 ﻿using DespachoJuridicoDESIMVC.Models.Case;
+using DespachoJuridicoDESIMVC.Models.Messages;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
     [Autenticated]
     public class CaseController : BaseController
     {
-        // GET: Case
+        #region Views
         public async Task<ActionResult> Index()
         {
             var response = await httpClient.GetAllClientes();
@@ -23,28 +24,41 @@ namespace DespachoJuridicoDESIMVC.Controllers
             var listItemsEstatus = new List<SelectListItem>();
 
             foreach (var i in response.ClientObjs)
-            { 
+            {
                 listItemsCleintes.Add(new SelectListItem
                 {
                     Text = i.Nombre,
                     Value = i.Id.ToString()
                 });
             }
-            listItemsEstatus.Add(new SelectListItem
+
+            var responseStatusCase = await httpClient.GetAllStatusCase();
+            var listStatusCase = new List<StatusCaseobj>();
+
+            if (responseStatusCase.Result.Successful)
             {
-                Text = "Abierto",
-                Value = "1"
-            });
-            listItemsEstatus.Add(new SelectListItem
-            {
-                Text = "Cerrado",
-                Value = "2"
-            });
+                listStatusCase.AddRange(responseStatusCase.StatusCaseObjs);
+                foreach (var i in listStatusCase)
+                {
+                    listItemsEstatus.Add(new SelectListItem
+                    {
+                        Text = i.Nombre,
+                        Value = i.Id.ToString()
+                    });
+                }
+            }
 
 
             ViewBag.EstatusCaso = listItemsEstatus;
             ViewBag.Clientes = listItemsCleintes;
             return View(new CaseObj());
         }
+        #endregion
+
+        #region Data Access
+
+        #endregion
+
+        //SaveOrUpdateCaso
     }
 }
