@@ -10,11 +10,11 @@ namespace DespachoJuridicoDESIMVC.Models.Case
     {
         public CaseObj()
         {
-            Customer = new ClientObj();
+            Cliente = new ClientObj();
             EstatusCaso = new StatusCaseObj();
         }
         public long Id { get; set; }
-        public ClientObj Customer { get; set; }
+        public ClientObj Cliente { get; set; }
         public StatusCaseObj EstatusCaso { get; set; }
         public string NumeroCaso { get; set; }
         public string Descripcion { get; set; }

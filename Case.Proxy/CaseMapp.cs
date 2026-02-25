@@ -1,10 +1,8 @@
 ﻿using Case.Domain;
+using Customer.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Case.Proxy
 {
@@ -81,9 +79,14 @@ namespace Case.Proxy
                 var item = CaseObj.Create(id);
                 if (item != null)
                 {
-                    item.SetClienteId(clienteId);
+                    // Ahora CaseObj espera un ClientObj, no un Id
+                    if (clienteId > 0)
+                    {
+                        var cliente = ClientObj.Create(clienteId);
+                        item.SetCliente(cliente);
+                    }
 
-                    // Temporal: solo asignamos el ID, luego se poblará el objeto StatusCase
+                    // Temporal: solo asignamos el ID del status, luego se poblará el objeto StatusCase
                     var statusCase = StatusCaseObj.Create(estatusCasoId);
                     item.SetEstatusCaso(statusCase);
 

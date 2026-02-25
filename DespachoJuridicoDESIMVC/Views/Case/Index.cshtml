@@ -1,202 +1,59 @@
-﻿@model DespachoJuridicoDESIMVC.Models.Case.CaseObj
-
+﻿
 @{
-    ViewBag.Title = "Gestión de Casos";
+    ViewBag.Title = "Visor de casos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/2.3.7/js/dataTables.js"></script>
+
 <div class="row">
     <div class="col-md-12">
-        <div class="page-header">
-            <h2>@(Model.Id > 0 ? "Editar Caso" : "Nuevo Caso")</h2>
-            <p class="page-subtitle">@(Model.Id > 0 ? "Modificar información del caso" : "Registrar nuevo caso legal")</p>
-        </div>
-
-        @using (Html.BeginForm("SaveOrUpdateCaso", "Caso", FormMethod.Post, new { @id = "frmCasoCrud" }))
-        {
-            @Html.HiddenFor(x => x.Id)
-            @Html.HiddenFor(x => x.CreatedBy)
-            @Html.HiddenFor(x => x.CreatedDt)
-            @Html.HiddenFor(x => x.Estatus)
-            @Html.HiddenFor(x => x.UpdatedBy)
-            @Html.HiddenFor(x => x.UpdatedDt)
-
-            <!-- Sección Información Básica -->
-            <div class="form-section">
-                <h3 class="section-title">Información Básica del Caso</h3>
-
-                <div class="row">
-                    <!-- Número de Caso -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Número de Caso *</label>
-                            <div class="case-number-container">
-                                @Html.TextBoxFor(x => x.NumeroCaso, new
-                                {
-                                    @class = "form-control",
-                                    @placeholder = "Ej: C-2023-001",
-                                    @maxlength = "100",
-                                    @readonly = Model.Id > 0 ? "readonly" : null
-                                })
-                            </div>
-                            @Html.ValidationMessageFor(x => x.NumeroCaso, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <!-- Cliente -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Cliente *</label>
-                            <div class="input-icon">
-                                @*@Html.DropDownListFor(x => x.Customer,
-                                    ViewBag.Clientes as SelectList,
-                                    "Seleccionar cliente...",
-                                    new { @class = "form-control", @required = "required" })*@
-                                @Html.DropDownListFor(x => x.Customer.Id, (IEnumerable<SelectListItem>)ViewBag.Clientes, new { @class = "form-control", @onchange = "ChangeCompany()" })
-                            </div>
-                            @Html.ValidationMessageFor(x => x.Customer, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <!-- Estatus del Caso -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Estatus del Caso *</label>
-                            <div class="input-icon">
-                                @*@Html.DropDownListFor(x => x.EstatusCaso,
-                                    ViewBag.EstatusCaso as SelectList,
-                                    "Seleccionar estatus...",
-                                    new { @class = "form-control", @required = "required" })*@
-                                @Html.DropDownListFor(x => x.EstatusCaso.Id, (IEnumerable<SelectListItem>)ViewBag.EstatusCaso, new { @class = "form-control" })
-                            </div>
-                            @Html.ValidationMessageFor(x => x.EstatusCaso, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Descripción -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Descripción</label>
-                            @Html.TextAreaFor(x => x.Descripcion, new
-                            {
-                                @class = "form-control",
-                                @placeholder = "Describe los detalles del caso legal...",
-                                @rows = "10",
-                                @maxlength = "500"
-                            })
-                            <div class="text-right char-counter">
-                                <span id="descripcionContador">@(Model.Descripcion?.Length ?? 0)</span>/500 caracteres
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sección Información Financiera -->
-            <div class="form-section">
-                <h3 class="section-title">Información Financiera</h3>
-
-                <div class="row">
-                    <!-- Monto Inicial -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Monto Inicial *</label>
-                            <div class="currency-input">
-                                @Html.TextBoxFor(x => x.MontoInicial, new
-                                {
-                                    @class = "form-control",
-                                    @placeholder = "0.00",
-                                    @type = "number",
-                                    @step = "0.01",
-                                    @min = "0"
-                                })
-                            </div>
-                            @Html.ValidationMessageFor(x => x.MontoInicial, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Botones de Acción -->
-            <div class="form-actions">
-                <a href="@Url.Action("Index", "Case")" class="btn btn-default">
-                    <i class="fa fa-times"></i> Cancelar
-                </a>
-                @if (Model.Id > 0)
-                {
-                    <button type="button" class="btn btn-danger" id="btnEliminar" data-id="@Model.Id">
-                        <i class="fa fa-trash"></i> Eliminar
-                    </button>
-                }
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-save"></i> @(Model.Id > 0 ? "Actualizar" : "Guardar")
-                </button>
-            </div>
-        }
+        <a href="/Case/Create" class="btn btn-success">Nuevo Caso</a>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table" id="tblCasos">
+        </table>
+    </div>
+</div>
+<script>
+    var tbl;
+    var arrayItems;
 
+    $(document).ready(function () {
+        GetAllCases();
+    });
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
-    <script>
-        $(function () {
-            // Contador de caracteres para descripción
-            $('#Descripcion').on('input', function () {
-                $('#descripcionContador').text($(this).val().length);
-            });
-
-            // Generar número de caso automático
-            $('#btnGenerarNumero').click(function () {
-                const fecha = new Date();
-                const year = fecha.getFullYear();
-                const month = String(fecha.getMonth() + 1).padStart(2, '0');
-                const day = String(fecha.getDate()).padStart(2, '0');
-                const randomNum = Math.floor(Math.random() * 999) + 1;
-                $('#NumeroCaso').val(`C-${year}-${month}${day}-${String(randomNum).padStart(3, '0')}`);
-            });
-
-            // Validación del formulario
-            $("#frmCasoCrud").validate({
-                rules: {
-                    "NumeroCaso": "required",
-                    "ClienteId": "required",
-                    "EstatusCasoId": "required",
-                    "MontoInicial": {
-                        required: true,
-                        number: true,
-                        min: 0.01
-                    }
-                },
-                messages: {
-                    "NumeroCaso": "El número de caso es requerido",
-                    "ClienteId": "Debe seleccionar un cliente",
-                    "EstatusCasoId": "Debe seleccionar un estatus",
-                    "MontoInicial": {
-                        required: "El monto inicial es requerido",
-                        number: "Debe ser un valor numérico",
-                        min: "El monto debe ser mayor a 0"
-                    }
-                },
-                errorClass: "text-danger",
-                errorElement: "span"
-            });
-
-            // Eliminar caso
-            $('#btnEliminar').click(function () {
-                if (confirm('¿Está seguro de eliminar este caso? Esta acción no se puede deshacer.')) {
-                    const id = $(this).data('id');
-                    window.location.href = '@Url.Action("Delete", "Caso")?id=' + id;
-                }
-            });
-
-            @if (Model.Id == 0)
-            {
-                <text>
-                // Generar número automático al cargar
-                $('#btnGenerarNumero').click();
-                </text>
+    function GetAllCases() {
+        GetMVC("/Case/GetAllCases", function (r) {
+            if (r.Result.Successful) {
+                arrayItems = r.CaseObjs;
+                tbl = $("#tblCasos").DataTable(
+                    {
+                        data: arrayItems,
+                        columns: [
+                            { data: "Id", title: "Id" },
+                            { data: "NumeroCaso", title: "Número de Caso" },
+                            { data: "Cliente.Nombre", title: "Cliente" },
+                            { data: "Cliente.Telefono", title: "Teléfono" },
+                            { data: "Estatus", title: "Estatus" },
+                            {
+                                data: "Id", render: function (data) {
+                                    return '<input type="button" value="Editar" class="btn btn-primary" onclick="EditCase(' + data + ')" />'
+                                }
+                            }
+                        ]
+                    });
+            }
+            else {
+                alert(r.Message);
             }
         });
-    </script>
+    }
+
+    function EditCase(id) {
+        window.location.href = "/Case/Create/" + id;
+    }
+</script>

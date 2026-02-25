@@ -1,4 +1,5 @@
-﻿using DespachoJuridicoDESIMVC.Models.Common;
+﻿using DespachoJuridicoDESIMVC.Models.Case;
+using DespachoJuridicoDESIMVC.Models.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,12 @@ namespace DespachoJuridicoDESIMVC.Models.Messages
         public DateTime CreatedDt { get; set; }
         public string UpdatedBy { get; set; }
         public object UpdatedDt { get; set; }
+    }
+
+    public class CaseMessagesResponse
+    {
+        public List<CaseObj> CaseObjs { get; set; }
+        public OperationResult Result { get; set; }
     }
 
 }

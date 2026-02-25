@@ -16,8 +16,25 @@ namespace DespachoJuridicoDESIMVC.Controllers
     public class CaseController : BaseController
     {
         #region Views
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Create(long id = 0)
         {
+
+            var caseObj = new CaseObj();
+
+            if (id != 0)
+            { 
+                var responseCase = await httpClient.GetCaseById(id);
+                if (responseCase.Result.Successful)
+                {
+                    caseObj = responseCase.CaseObjs.FirstOrDefault();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "No se pudo obtener la información del caso.");
+                    return View(caseObj);
+                }
+            }
+
             var response = await httpClient.GetAllClientes();
 
             var listItemsCleintes = new List<SelectListItem>();
@@ -50,14 +67,48 @@ namespace DespachoJuridicoDESIMVC.Controllers
 
             ViewBag.EstatusCaso = listItemsEstatus;
             ViewBag.Clientes = listItemsCleintes;
-            return View(new CaseObj());
+            return View(caseObj);
+        }
+        public async Task<ActionResult> Index()
+        {
+            return View();
         }
         #endregion
 
         #region Data Access
-
+        public async Task<string> GetAllCases()
+        {
+            var response = await httpClient.GetAllCase();
+            return JsonConvert.SerializeObject(response);
+        }
+        public async Task<ActionResult> SaveOrUpdateCase(CaseObj caseObj)
+        {
+            if (caseObj == null)
+            {
+                ModelState.AddModelError(string.Empty, "Datos de caso inválidos.");
+                return View("Create");
+            }
+            try
+            {
+                var response = await httpClient.SaveOrUpdateCase(caseObj);
+                if (response?.Result?.Successful == true)
+                {
+                    return RedirectToAction("Create");
+                }
+                if (response?.Result?.SystemMessages != null && response.Result.SystemMessages.Any())
+                {
+                    foreach (var msg in response.Result.SystemMessages)
+                    {
+                        ModelState.AddModelError(string.Empty, msg.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Ocurrió un error al guardar el caso: {ex.Message}");
+            }
+            return View("Create", caseObj);
+        }
         #endregion
-
-        //SaveOrUpdateCaso
     }
 }

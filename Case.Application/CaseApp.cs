@@ -1,6 +1,7 @@
 ﻿using Case.Domain;
 using Case.Proxy;
 using Common.Domain;
+using Customer.Proxy;
 using SqlProxy;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace Case.Application
     {
         private readonly IStatusCaseProxy _statusProxy;
         private readonly ICaseProxy _caseProxy;
+        private readonly IClientProxy _clientProxy;
 
-        public CaseApp(IStatusCaseProxy statusProxy, ICaseProxy caseProxy)
+        public CaseApp(IStatusCaseProxy statusProxy, ICaseProxy caseProxy, IClientProxy clientProxy)
         {
             _statusProxy = statusProxy ?? throw new ArgumentNullException(nameof(statusProxy));
             _caseProxy = caseProxy;
+            _clientProxy = clientProxy;
         }
         public List<StatusCaseObj> GetAllStatusCase(out OperationResult result)
         {
@@ -123,6 +126,16 @@ namespace Case.Application
                         if (statusList.Any())
                         {
                             caseObj.SetEstatusCaso(statusList.First());
+                        }
+                    }
+
+                    if(caseObj.Cliente != null && caseObj.Cliente.Id > 0)
+                    {
+                        DataTable clienteDT = _clientProxy.GetClienteById(caseObj.Cliente.Id);
+                        var clienteList = ClientMapp.MappCliente(clienteDT);
+                        if (clienteList.Any())
+                        {
+                            caseObj.SetCliente(clienteList.First());
                         }
                     }
                 }
@@ -230,7 +243,7 @@ namespace Case.Application
 
                 DataTable responseDT = _caseProxy.SaveOrUpdateCaso(
                     caseObj.Id,
-                    caseObj.ClienteId,
+                    caseObj.Cliente?.Id ?? 0,
                     estatusCasoId,
                     caseObj.NumeroCaso,
                     caseObj.Descripcion,

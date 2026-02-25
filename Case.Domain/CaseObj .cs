@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Customer.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Case.Domain
     public class CaseObj
     {
         private long _id;
-        private long _clienteId;
+        private ClientObj _cliente;
         private StatusCaseObj _estatusCaso;
         private string _numeroCaso;
         private string _descripcion;
@@ -21,7 +22,7 @@ namespace Case.Domain
         private DateTime? _updatedDt;
 
         public long Id => _id;
-        public long ClienteId => _clienteId;
+        public ClientObj Cliente => _cliente;
         public StatusCaseObj EstatusCaso => _estatusCaso;
         public string NumeroCaso => _numeroCaso;
         public string Descripcion => _descripcion;
@@ -35,7 +36,7 @@ namespace Case.Domain
         private CaseObj(long id)
         {
             _id = id;
-            _clienteId = 0;
+            _cliente = null;
             _estatusCaso = null;
             _numeroCaso = string.Empty;
             _descripcion = string.Empty;
@@ -52,9 +53,9 @@ namespace Case.Domain
             return new CaseObj(id);
         }
 
-        public CaseObj SetClienteId(long clienteId)
+        public CaseObj SetCliente(ClientObj cliente)
         {
-            _clienteId = clienteId;
+            _cliente = cliente;
             return this;
         }
 

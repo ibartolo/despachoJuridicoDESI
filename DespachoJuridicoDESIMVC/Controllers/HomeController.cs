@@ -62,6 +62,21 @@ namespace DespachoJuridicoDESIMVC.Controllers
 
                 return JsonConvert.SerializeObject(response);
         }
+
+        public ActionResult LogOut()
+        {
+            SessionHelper.CloseSession();
+            if (Request.Cookies["ConfigMenu"] != null)
+            {
+                var c = new HttpCookie("ConfigMenu")
+                {
+                    Expires = DateTime.Now.AddDays(-1)
+                };
+                Response.Cookies.Add(c);
+            }
+
+            return RedirectToAction("Autentication");
+        }
         #endregion
     }
 }

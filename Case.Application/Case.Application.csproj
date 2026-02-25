@@ -58,6 +58,14 @@
       <Project>{32430AC5-C0F5-4AA7-9773-263AA67D5E54}</Project>
       <Name>Common.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Customer.Domain\Customer.Domain.csproj">
+      <Project>{A5166C66-7B79-459D-A490-72145CF74268}</Project>
+      <Name>Customer.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Customer.Proxy\Customer.Proxy.csproj">
+      <Project>{545C903A-5A32-49EB-8B96-E3BD6E0B78C4}</Project>
+      <Name>Customer.Proxy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SqlProxy\SqlProxy.csproj">
       <Project>{3E912F1B-A544-46A0-BE23-AA4D8043125C}</Project>
       <Name>SqlProxy</Name>

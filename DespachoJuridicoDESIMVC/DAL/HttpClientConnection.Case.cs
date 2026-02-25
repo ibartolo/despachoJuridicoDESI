@@ -1,4 +1,5 @@
-﻿using DespachoJuridicoDESIMVC.Models.Messages;
+﻿using DespachoJuridicoDESIMVC.Models.Case;
+using DespachoJuridicoDESIMVC.Models.Messages;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,38 @@ namespace DespachoJuridicoDESIMVC.DAL
 
             var response = JsonConvert.DeserializeObject<StatusCaseMessagesResponse>(result.ToString());
 
+            return response;
+        }
+
+        public async Task<CaseMessagesResponse> GetAllCase()
+        {
+            var result = await RequestAsync<object>("api/Case/List", HttpMethod.Post, null,
+                new Func<string, string>((responseString) =>
+                {
+                    return responseString;
+                }), token.Token.access_token);
+
+            var response = JsonConvert.DeserializeObject<CaseMessagesResponse>(result.ToString());
+            return response;
+        }
+        public async Task<CaseMessagesResponse> GetCaseById(long id)
+        {
+            var result = await RequestAsync<object>("api/Case/First", HttpMethod.Post, new { Id = id },
+                new Func<string, string>((responseString) =>
+                {
+                    return responseString;
+                }), token.Token.access_token);
+            var response = JsonConvert.DeserializeObject<CaseMessagesResponse>(result.ToString());
+            return response;
+        }
+        public async Task<CaseMessagesResponse> SaveOrUpdateCase(CaseObj caseObj)
+        {
+            var result = await RequestAsync<object>("api/Case", HttpMethod.Post, caseObj,
+                new Func<string, string>((responseString) =>
+                {
+                    return responseString;
+                }), token.Token.access_token);
+            var response = JsonConvert.DeserializeObject<CaseMessagesResponse>(result.ToString());
             return response;
         }
     }
