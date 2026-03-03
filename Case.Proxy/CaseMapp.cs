@@ -78,6 +78,7 @@ namespace Case.Proxy
 
                 var item = CaseObj.Create(id);
                 if (item != null)
+
                 {
                     // Ahora CaseObj espera un ClientObj, no un Id
                     if (clienteId > 0)
