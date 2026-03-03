@@ -9,6 +9,7 @@ namespace Catalog.Proxy
 {
     public interface ICatalogProxi
     {
-
+        DataTable SaveOrUpdateTipoDocumento(long Id, string nombre, string descripcion, bool estatus,
+            string creayedBy, DateTime? createdDt, string updatedBy, DateTime? updatedDt);
     }
 }

@@ -12,7 +12,23 @@ namespace Catalog.Proxy
 {
     public class CatalogProxy : DbWrapper, ICatalogProxi
     {
+        public DataTable SaveOrUpdateTipoDocumento(long id,string nombre,string descripcion, bool estatus,
+            string creayedBy, DateTime? createdDt, string updatedBy, DateTime? updatedDt)
 
+        {
+            var sqlParameters = new SqlParameter[]
+            {
+                new SqlParameter ("@Id",id),
+                new SqlParameter("@Nombre", nombre),
+                new SqlParameter("@Descripcion", descripcion),
+                new SqlParameter("@Estatus", estatus),
+                new SqlParameter("@CreatedBy", creayedBy),
+                new SqlParameter("@CreatedDt", createdDt),
+                new SqlParameter("@UpdatedBy", updatedBy),
+                new SqlParameter("@UpdatedDt", updatedDt)
+            };
+            return GetObject("SaveOrUpdateTipoDocumento", CommandType.StoredProcedure, sqlParameters);
 
+        }
     }
 }
