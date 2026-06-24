@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F20C3D87-EBE3-417D-88D0-3160E69CA2CC}</ProjectGuid>
+    <ProjectGuid>{A445734A-3227-45A9-A194-5221C71CDAB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>User.Domain</RootNamespace>
-    <AssemblyName>User.Domain</AssemblyName>
+    <RootNamespace>Court.Domain</RootNamespace>
+    <AssemblyName>Court.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,18 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UserObj.cs" />
+    <Compile Include="Court.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Case.Domain\Case.Domain.csproj">
-      <Project>{A9813BD1-C657-443D-A029-1535CFEF2F42}</Project>
-      <Name>Case.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.Domain\Common.Domain.csproj">
-      <Project>{32430AC5-C0F5-4AA7-9773-263AA67D5E54}</Project>
-      <Name>Common.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

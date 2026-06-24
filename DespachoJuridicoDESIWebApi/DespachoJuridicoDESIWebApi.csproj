@@ -159,6 +159,8 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AutenticationController.cs" />
+    <Compile Include="Controllers\CourtController.cs" />
+    <Compile Include="Controllers\RecorController.cs" />
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Global.asax.cs">
@@ -200,6 +202,22 @@
       <Project>{32430ac5-c0f5-4aa7-9773-263aa67d5e54}</Project>
       <Name>Common.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Court.Application\Court.Application.csproj">
+      <Project>{C9051C4B-580B-47FC-B0B5-9496FBF7F62D}</Project>
+      <Name>Court.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Court.Domain\Court.Domain.csproj">
+      <Project>{A445734A-3227-45A9-A194-5221C71CDAB4}</Project>
+      <Name>Court.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Court.Proxy\Court.Proxy.csproj">
+      <Project>{95252381-7A30-4CBF-851C-654D87D6E4BA}</Project>
+      <Name>Court.Proxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CourtMessages\Court.Messages.csproj">
+      <Project>{D329BEB8-ABC8-4AB9-8C0F-531BC97F6A6E}</Project>
+      <Name>Court.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Customer.Application\Customer.Application.csproj">
       <Project>{645725B2-5EC1-45DF-9FF9-FB04D5A5569A}</Project>
       <Name>Customer.Application</Name>
@@ -215,6 +233,22 @@
     <ProjectReference Include="..\Customer.Proxy\Customer.Proxy.csproj">
       <Project>{545C903A-5A32-49EB-8B96-E3BD6E0B78C4}</Project>
       <Name>Customer.Proxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Record.Application\Record.Application.csproj">
+      <Project>{548B3BB6-DD13-4B90-91EA-23E1CB162961}</Project>
+      <Name>Record.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Record.Domain\Record.Domain.csproj">
+      <Project>{B86BC364-D8B2-48B2-9593-1F1911BF7524}</Project>
+      <Name>Record.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Record.Messages\Record.Messages.csproj">
+      <Project>{84F45E79-D93E-4467-AAEB-27F06CED95AD}</Project>
+      <Name>Record.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Record.Proxy\Record.Proxy.csproj">
+      <Project>{B12E3EE8-0F5A-4364-A8E4-B0F1F82611F0}</Project>
+      <Name>Record.Proxy</Name>
     </ProjectReference>
     <ProjectReference Include="..\SqlProxy\SqlProxy.csproj">
       <Project>{3e912f1b-a544-46a0-be23-aa4d8043125c}</Project>
