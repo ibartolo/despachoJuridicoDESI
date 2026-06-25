@@ -1,6 +1,7 @@
-﻿using DespachoJuridicoDESIMVC.Models.Court;
-using DespachoJuridicoDESIMVC.Models.Record;
+﻿using DespachoJuridicoDESIMVC.Helpers;
+using DespachoJuridicoDESIMVC.Models.Court;
 using DespachoJuridicoDESIMVC.Models.Messages;
+using DespachoJuridicoDESIMVC.Models.Record;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -109,6 +110,32 @@ namespace DespachoJuridicoDESIMVC.Controllers
 
                 if (response?.Result?.Successful == true)
                 {
+                    var caso = await httpClient.GetCaseById(recordObj.Case.Id);
+                    var clienteResponse = await httpClient.GetClienteById(caso.CaseObjs.FirstOrDefault()?.Cliente?.Id ?? 0);
+                    // Si es un expediente nuevo (Id = 0), enviar notificación
+                    if (recordObj.Id == 0 && recordObj.Case?.Cliente != null && IsValidEmail(clienteResponse.ClientObjs.First()?.Correo))
+                    {
+                        try
+                        {
+                            var templatePath = Server.MapPath("~/Templates/Template_RegistroExpediente.html");
+                            var mensaje = System.IO.File.ReadAllText(templatePath);
+
+                            mensaje = mensaje.Replace("{{NombreCliente}}", recordObj.Case.Cliente.Nombre);
+                            mensaje = mensaje.Replace("{{NumeroExpediente}}", recordObj.RecordNumber);
+                            mensaje = mensaje.Replace("{{NumeroCaso}}", recordObj.Case?.NumeroCaso ?? "N/A");
+                            mensaje = mensaje.Replace("{{NombreJuzgado}}", recordObj.Court?.Nombre ?? "No asignado");
+                            mensaje = mensaje.Replace("{{EstatusExpediente}}", recordObj.Status ? "Activo" : "Inactivo");
+                            mensaje = mensaje.Replace("{{ComentariosExpediente}}", recordObj.Comentarios ?? "Sin comentarios");
+
+                            var para = new List<string> { clienteResponse.ClientObjs.First()?.Correo };
+                            EmailHelper.EnvioEmaiil(para, $"Notificación de Expediente - {recordObj.RecordNumber}", mensaje);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Error al enviar correo: {ex.Message}");
+                        }
+                    }
+
                     return RedirectToAction("Index");
                 }
 

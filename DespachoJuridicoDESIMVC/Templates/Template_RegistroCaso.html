@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificación de Caso - Despacho Jurídico</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="margin: 0; padding: 20px; background-color: #f5f7fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(44, 62, 80, 0.1);">
+        
+        <!-- Encabezado -->
+        <div style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); padding: 40px 30px; text-align: center;">
+            <div style="margin-bottom: 15px;">
+                <img src="https://img.genially.com/63eeeed672cc8d001897dffb/775b7efe-efa0-441b-9c8a-e056dc20afa4.png" alt="Logo Despacho Jurídico" style="height: 60px; filter: brightness(0) invert(1);">
+            </div>
+            <h1 style="color: white; font-size: 1.8rem; margin: 10px 0 0 0; font-weight: 700;">Despacho Jurídico</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 0.95rem;">Salas y Asociados</p>
+        </div>
+
+        <!-- Cuerpo del correo -->
+        <div style="padding: 40px 30px;">
+            <!-- Saludo -->
+            <div style="font-size: 1.2rem; font-weight: 600; color: #2c3e50; margin-bottom: 20px;">
+                ¡Hola, <strong style="color: #3498db;">{{NombreCliente}}</strong>!
+            </div>
+
+            <!-- Mensaje de notificación -->
+            <div style="color: #6c757d; margin-bottom: 25px; line-height: 1.6;">
+                <p style="margin: 0 0 15px 0;">
+                    <strong>¡Su caso ha sido registrado en nuestro sistema!</strong>
+                </p>
+                <p style="margin: 0;">
+                    Le informamos que hemos creado un nuevo caso legal a su nombre en el Despacho Jurídico Salas y Asociados.
+                    A continuación, encontrará los detalles de su caso.
+                </p>
+            </div>
+
+            <!-- Datos del caso -->
+            <div style="background: #f8f9fc; border-radius: 12px; padding: 20px; margin: 25px 0; border-left: 4px solid #f39c12;">
+                <div style="font-weight: 700; color: #2c3e50; margin-bottom: 15px; font-size: 1rem;">
+                    <i class="fas fa-gavel" style="margin-right: 8px; color: #f39c12;"></i> Detalles del Caso
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e1e5eb;">
+                    <span style="color: #6c757d; font-size: 0.85rem;">Número de Caso:</span>
+                    <span style="color: #2c3e50; font-weight: 600; font-size: 0.85rem;">{{NumeroCaso}}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e1e5eb;">
+                    <span style="color: #6c757d; font-size: 0.85rem;">Descripción:</span>
+                    <span style="color: #2c3e50; font-weight: 500; font-size: 0.85rem;">{{DescripcionCaso}}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e1e5eb;">
+                    <span style="color: #6c757d; font-size: 0.85rem;">Estatus:</span>
+                    <span style="color: #27ae60; font-weight: 600; font-size: 0.85rem;">{{EstatusCaso}}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                    <span style="color: #6c757d; font-size: 0.85rem;">Abogado asignado:</span>
+                    <span style="color: #2c3e50; font-weight: 500; font-size: 0.85rem;">{{AbogadoAsignado}}</span>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div style="background: #e8f4fd; border-radius: 12px; padding: 20px; margin: 25px 0; border-left: 4px solid #3498db;">
+                <div style="font-weight: 700; color: #2c3e50; margin-bottom: 15px; font-size: 1rem;">
+                    <i class="fas fa-info-circle" style="margin-right: 8px; color: #3498db;"></i> Información importante
+                </div>
+                <ul style="margin: 0; padding-left: 20px; color: #2c3e50; font-size: 0.9rem;">
+                    <li style="margin-bottom: 8px;">El abogado asignado se pondrá en contacto con usted en las próximas 24 horas.</li>
+                    <li style="margin-bottom: 8px;">Puede dar seguimiento a su caso a través de nuestro portal de clientes.</li>
+                    <li>Recibirá notificaciones sobre el avance de su caso.</li>
+                </ul>
+            </div>
+
+            <!-- Datos del despacho -->
+            <div style="text-align: center; margin: 35px 0 30px 0; background: #f5f7fa; border-radius: 12px; padding: 20px;">
+                <p style="color: #6c757d; font-size: 0.85rem; margin: 0 0 10px 0;">
+                    <strong style="color: #2c3e50;">Despacho Jurídico Salas y Asociados</strong>
+                </p>
+                <p style="color: #6c757d; font-size: 0.8rem; margin: 5px 0;">
+                    <i class="fas fa-map-marker-alt" style="color: #3498db;"></i> Calle 6 No. 202-B, Col. Cazones, Poza Rica, Veracruz
+                </p>
+                <p style="color: #6c757d; font-size: 0.8rem; margin: 5px 0;">
+                    <i class="fas fa-phone-alt" style="color: #3498db;"></i> (800) 220 2015
+                </p>
+                <p style="color: #6c757d; font-size: 0.8rem; margin: 5px 0;">
+                    <i class="fas fa-envelope" style="color: #3498db;"></i> contacto@salasyasociados.com.mx
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background: #f8f9fc; padding: 25px 30px; text-align: center; border-top: 1px solid #e1e5eb;">
+            <div style="color: #858796; font-size: 0.7rem; margin-top: 12px;">
+                &copy; 2026 Despacho Jurídico Salas y Asociados. Todos los derechos reservados.<br>
+                <a href="#" style="color: #3498db; text-decoration: none;">Aviso de Privacidad</a> | 
+                <a href="#" style="color: #3498db; text-decoration: none;">Términos y Condiciones</a>
+            </div>
+            <div style="color: #858796; font-size: 0.65rem; margin-top: 12px;">
+                Este es un mensaje automático, por favor no responder a este correo.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
