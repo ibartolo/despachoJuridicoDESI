@@ -50,6 +50,10 @@
       <Project>{A9813BD1-C657-443D-A029-1535CFEF2F42}</Project>
       <Name>Case.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Case.Messages\Case.Messages.csproj">
+      <Project>{5111F77E-2719-4581-8D3C-6C3DBA169FA6}</Project>
+      <Name>Case.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Case.Proxy\Case.Proxy.csproj">
       <Project>{66AE9E6F-CE95-4A65-B47A-1D70A4BE8AB8}</Project>
       <Name>Case.Proxy</Name>

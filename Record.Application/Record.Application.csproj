@@ -74,6 +74,10 @@
       <Project>{B86BC364-D8B2-48B2-9593-1F1911BF7524}</Project>
       <Name>Record.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Record.Messages\Record.Messages.csproj">
+      <Project>{84F45E79-D93E-4467-AAEB-27F06CED95AD}</Project>
+      <Name>Record.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Record.Proxy\Record.Proxy.csproj">
       <Project>{B12E3EE8-0F5A-4364-A8E4-B0F1F82611F0}</Project>
       <Name>Record.Proxy</Name>

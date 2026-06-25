@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Court.Messages.CourtMessages;
 
 namespace Court.Application
 {
@@ -13,6 +14,6 @@ namespace Court.Application
         List<CourtObj> GetAllCourts(out OperationResult result);
         CourtObj GetCourtById(long id, out OperationResult result);
         DateTime DeleteCourt(long id, out OperationResult result);
-        CourtObj SaveOrUpdateCourt(CourtObj court, out OperationResult result);
+        CourtObj SaveOrUpdateCourt(CourtEntity court, out OperationResult result);
     }
 }

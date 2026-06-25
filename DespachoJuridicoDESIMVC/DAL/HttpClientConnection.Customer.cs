@@ -41,7 +41,7 @@ namespace DespachoJuridicoDESIMVC.DAL
 
             return response;
         }
-        public async Task<ClientMassagesResponse> SaveOrUpdateCliente(ClientObj client)
+        public async Task<ClientMassagesResponse> SaveOrUpdateCliente(ClienteObj  client)
         {
             MapAuditFields(client);
 

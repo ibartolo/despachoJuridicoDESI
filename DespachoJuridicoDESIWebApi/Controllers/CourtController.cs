@@ -6,6 +6,7 @@ using Court.Domain;
 using Record.Application;
 using Record.Domain;
 using Record.Messages;
+using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,12 @@ using static Court.Messages.CourtMessages;
 
 namespace DespachoJuridicoDESIWebApi.Controllers
 {
-    //[Authorize]
+
+    /// <summary>
+    /// Controlador para gestión de Juzgados (Catálogo)
+    /// Afecta la tabla: Juzgado
+    /// </summary>
+    [Authorize]
     [RoutePrefix("api/Court")]
     public class CourtController : ApiController
     {
@@ -68,7 +74,6 @@ namespace DespachoJuridicoDESIWebApi.Controllers
         public IHttpActionResult SaveOrUpdate(SaveOrUpdateCourtRequest request)
         {
             CourtMessagesResponse response = new CourtMessagesResponse();
-            response.CourtObjs = new List<CourtObj>();
             var item = _courtApp.SaveOrUpdateCourt(request.Court, out var operationResult);
             if (item != null)
                 response.CourtObjs.Add(item);

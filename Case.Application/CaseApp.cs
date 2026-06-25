@@ -9,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Case.Messages.CaseMessages;
 
 namespace Case.Application
 {
@@ -234,7 +235,7 @@ namespace Case.Application
                 return DateTime.MinValue;
             }
         }
-        public CaseObj SaveOrUpdateCase(CaseObj caseObj, out OperationResult result)
+        public CaseObj SaveOrUpdateCase(CaseEntity caseObj, out OperationResult result)
         {
             result = new OperationResult { Successful = true };
             try

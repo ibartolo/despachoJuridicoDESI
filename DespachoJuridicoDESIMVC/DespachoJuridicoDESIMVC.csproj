@@ -109,11 +109,14 @@
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RecordController.cs" />
     <Compile Include="DAL\HttpClientBase.cs" />
     <Compile Include="DAL\HttpClientConnection.Autentication.cs" />
     <Compile Include="DAL\HttpClientConnection.Case.cs" />
+    <Compile Include="DAL\HttpClientConnection.Court.cs" />
     <Compile Include="DAL\HttpClientConnection.cs" />
     <Compile Include="DAL\HttpClientConnection.Customer.cs" />
+    <Compile Include="DAL\HttpClientConnection.Record.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -124,14 +127,18 @@
     <Compile Include="Models\Autentication\TokenCookie.cs" />
     <Compile Include="Models\Autentication\UserObj.cs" />
     <Compile Include="Models\Case\CaseObj.cs" />
-    <Compile Include="Models\Case\StatusCaseObj.cs" />
+    <Compile Include="Models\Case\EstatusCasoObj.cs" />
+    <Compile Include="Models\Court\CourtObj.cs" />
     <Compile Include="Models\Customer\ClientObj.cs" />
     <Compile Include="Models\IAuditable.cs" />
     <Compile Include="Models\Messages\CaseMessages.cs" />
     <Compile Include="Models\Messages\ClientMessages.cs" />
+    <Compile Include="Models\Messages\CourtMessages.cs" />
+    <Compile Include="Models\Messages\RecordMessages.cs" />
     <Compile Include="Models\Messages\UserMassages.cs" />
     <Compile Include="Models\Common\OperationResult.cs" />
     <Compile Include="Models\Common\SystemMessage.cs" />
+    <Compile Include="Models\Record\RecordObj.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +153,8 @@
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
     <Content Include="Views\Case\Create.cshtml" />
+    <Content Include="Views\Record\Create.cshtml" />
+    <Content Include="Views\Record\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

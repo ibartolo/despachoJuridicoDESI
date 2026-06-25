@@ -26,7 +26,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
                 return View(response.ClientObjs.FirstOrDefault());
             }
 
-            return View(new ClientObj());
+            return View(new ClienteObj ());
         }
         public ActionResult Index()
         {
@@ -44,7 +44,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SaveOrUpdateCliente(ClientObj client)
+        public async Task<ActionResult> SaveOrUpdateCliente(ClienteObj  client)
         {
             if (client == null)
             {
@@ -58,7 +58,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
 
                 if (response?.Result?.Successful == true)
                 {
-                    return RedirectToAction("Create");
+                    return RedirectToAction("Index");
                 }
 
                 if (response?.Result?.SystemMessages != null && response.Result.SystemMessages.Any())

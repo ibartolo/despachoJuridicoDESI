@@ -58,6 +58,10 @@
       <Project>{95252381-7A30-4CBF-851C-654D87D6E4BA}</Project>
       <Name>Court.Proxy</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CourtMessages\Court.Messages.csproj">
+      <Project>{D329BEB8-ABC8-4AB9-8C0F-531BC97F6A6E}</Project>
+      <Name>Court.Messages</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

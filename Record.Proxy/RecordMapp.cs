@@ -26,7 +26,7 @@ namespace Record.Proxy
 
             foreach (DataRow row in dto.Rows)
             {
-                // Datos del Expediente
+                #region Datos del Expediente
                 long id = 0;
                 if (dto.Columns.Contains("Id") && row["Id"] != DBNull.Value)
                 {
@@ -35,6 +35,10 @@ namespace Record.Proxy
 
                 string recordNumber = dto.Columns.Contains("NumeroExpediente") && row["NumeroExpediente"] != DBNull.Value
                     ? row["NumeroExpediente"].ToString() ?? string.Empty
+                    : string.Empty;
+
+                string comentarios = dto.Columns.Contains("Comentarios") && row["Comentarios"] != DBNull.Value
+                    ? row["Comentarios"].ToString() ?? string.Empty
                     : string.Empty;
 
                 bool status = false;
@@ -60,8 +64,9 @@ namespace Record.Proxy
                 {
                     try { updatedDt = Convert.ToDateTime(row["UpdatedDt"]); } catch { updatedDt = null; }
                 }
+                #endregion
 
-                // Datos del Caso
+                #region Datos del Caso
                 CaseObj caseObj = null;
                 if (dto.Columns.Contains("Caso_Id") && row["Caso_Id"] != DBNull.Value)
                 {
@@ -88,7 +93,6 @@ namespace Record.Proxy
                     caseObj.SetInformacionCaso(caseNumber, caseDescription, caseAmount);
                     caseObj.SetEstatus(caseStatus);
 
-                    // ClienteId se asigna después si se necesita
                     if (dto.Columns.Contains("Caso_ClienteId") && row["Caso_ClienteId"] != DBNull.Value)
                     {
                         long clientId = Convert.ToInt64(row["Caso_ClienteId"]);
@@ -96,8 +100,9 @@ namespace Record.Proxy
                         caseObj.SetCliente(client);
                     }
                 }
+                #endregion
 
-                // Datos del Juzgado
+                #region Datos del Juzgado
                 CourtObj courtObj = null;
                 if (dto.Columns.Contains("Juzgado_Id") && row["Juzgado_Id"] != DBNull.Value)
                 {
@@ -142,7 +147,9 @@ namespace Record.Proxy
                     courtObj.SetObservaciones(courtObservations);
                     courtObj.SetEstatus(courtStatus);
                 }
+                #endregion
 
+                #region Creación del objeto Record
                 var item = RecordObj.Create(id);
                 if (item != null)
                 {
@@ -153,6 +160,7 @@ namespace Record.Proxy
                         item.SetCourt(courtObj);
 
                     item.SetRecordNumber(recordNumber);
+                    item.SetComentarios(comentarios);
                     item.SetStatus(status);
 
                     if (createdDt.HasValue)
@@ -166,6 +174,7 @@ namespace Record.Proxy
 
                     list.Add(item);
                 }
+                #endregion
             }
 
             return list;

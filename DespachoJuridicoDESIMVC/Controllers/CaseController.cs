@@ -93,7 +93,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
                 var response = await httpClient.SaveOrUpdateCase(caseObj);
                 if (response?.Result?.Successful == true)
                 {
-                    return RedirectToAction("Create");
+                    return RedirectToAction("Index");
                 }
                 if (response?.Result?.SystemMessages != null && response.Result.SystemMessages.Any())
                 {

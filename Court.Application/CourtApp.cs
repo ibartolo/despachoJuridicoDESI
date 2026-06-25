@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Court.Messages.CourtMessages;
 
 namespace Court.Application
 {
@@ -75,7 +76,7 @@ namespace Court.Application
             }
         }
 
-        public CourtObj SaveOrUpdateCourt(CourtObj court, out OperationResult result)
+        public CourtObj SaveOrUpdateCourt(CourtEntity court, out OperationResult result)
         {
             result = new OperationResult { Successful = true };
             try

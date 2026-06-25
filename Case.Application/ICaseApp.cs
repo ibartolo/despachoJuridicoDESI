@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Case.Messages.CaseMessages;
 
 namespace Case.Application
 {
@@ -19,6 +20,6 @@ namespace Case.Application
         CaseObj GetCaseById(long id, out OperationResult result);
         List<CaseObj> GetCasesByClientId(long clientId, out OperationResult result);
         DateTime DeleteCase(long id, out OperationResult result);
-        CaseObj SaveOrUpdateCase(CaseObj caseObj, out OperationResult result);
+        CaseObj SaveOrUpdateCase(CaseEntity caseObj, out OperationResult result);
     }
 }

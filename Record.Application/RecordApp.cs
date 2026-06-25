@@ -3,6 +3,7 @@ using Case.Proxy;
 using Common.Domain;
 using Court.Proxy;
 using Record.Domain;
+using Record.Messages;
 using Record.Proxy;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,30 @@ namespace Record.Application
 {
     public class RecordApp : IRecordApp
     {
-        private readonly IRecordProxy _recordProxy;
+        private readonly IRecordProxy _proxy;
 
-        public RecordApp(IRecordProxy recordProxy)
+        public RecordApp(IRecordProxy proxy)
         {
-            _recordProxy = recordProxy ?? throw new ArgumentNullException(nameof(recordProxy));
+            _proxy = proxy ?? throw new ArgumentNullException(nameof(proxy));
+        }
+
+        public List<RecordObj> GetAllRecords(out OperationResult result)
+        {
+            result = new OperationResult { Successful = true };
+            try
+            {
+                DataTable responseDT = _proxy.GetAllRecords();
+                return RecordMapp.MappRecord(responseDT) ?? new List<RecordObj>();
+            }
+            catch (Exception ex)
+            {
+                result.Successful = false;
+                result.SystemMessages = new List<SystemMessage>
+            {
+                new SystemMessage { Message = "Error al obtener todos los expedientes." }
+            };
+                return new List<RecordObj>();
+            }
         }
 
         public List<RecordObj> GetRecordsByCaseId(long caseId, out OperationResult result)
@@ -25,7 +45,7 @@ namespace Record.Application
             result = new OperationResult { Successful = true };
             try
             {
-                DataTable responseDT = _recordProxy.GetRecordByCaseId(caseId);
+                DataTable responseDT = _proxy.GetRecordByCaseId(caseId);
                 return RecordMapp.MappRecord(responseDT) ?? new List<RecordObj>();
             }
             catch (Exception ex)
@@ -44,7 +64,7 @@ namespace Record.Application
             result = new OperationResult { Successful = true };
             try
             {
-                DataTable responseDT = _recordProxy.GetRecordByCaseId(id);
+                DataTable responseDT = _proxy.GetRecordById(id);
                 return RecordMapp.MappRecord(responseDT).FirstOrDefault();
             }
             catch (Exception ex)
@@ -63,7 +83,7 @@ namespace Record.Application
             result = new OperationResult { Successful = true };
             try
             {
-                return _recordProxy.DeleteRecord(id);
+                return _proxy.DeleteRecord(id);
             }
             catch (Exception ex)
             {
@@ -76,26 +96,23 @@ namespace Record.Application
             }
         }
 
-        public RecordObj SaveOrUpdateRecord(RecordObj record, out OperationResult result)
+        public RecordObj SaveOrUpdateRecord(RecordEntity record, out OperationResult result)
         {
             result = new OperationResult { Successful = true };
             try
             {
-                long caseId = record.Case?.Id ?? 0;
-                long courtId = record.Court?.Id ?? 0;
-
-                DataTable responseDT = _recordProxy.SaveOrUpdateRecord(
+                DataTable responseDT = _proxy.SaveOrUpdateRecord(
                     record.Id,
-                    caseId,
-                    courtId,
+                    record.Case.Id,
+                    record.Court.Id,
                     record.RecordNumber,
+                    record.Comentarios,
                     record.Status,
                     record.CreatedBy,
                     record.CreatedDt,
                     record.UpdatedBy,
                     record.UpdatedDt
                 );
-
                 return RecordMapp.MappRecord(responseDT).FirstOrDefault();
             }
             catch (Exception ex)
