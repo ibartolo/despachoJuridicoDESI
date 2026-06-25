@@ -12,6 +12,11 @@ namespace Court.Messages
     {
         public class CourtMessagesResponse
         {
+            public CourtMessagesResponse() 
+            {
+                CourtObjs = new List<CourtObj>();
+                Result = new OperationResult();
+            }
             public List<CourtObj> CourtObjs { get; set; }
             public OperationResult Result { get; set; }
         }
@@ -28,6 +33,10 @@ namespace Court.Messages
 
         public class SaveOrUpdateCourtRequest
         {
+            public SaveOrUpdateCourtRequest()
+            { 
+                Court = new CourtEntity();
+            }
             public CourtEntity Court { get; set; }
         }
         public class CourtEntity

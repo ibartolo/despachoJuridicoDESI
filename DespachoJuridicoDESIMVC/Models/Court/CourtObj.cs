@@ -17,7 +17,7 @@ namespace DespachoJuridicoDESIMVC.Models.Court
         public string Telefono { get; set; } = string.Empty;
         public string Horario { get; set; } = string.Empty;
         public string Observaciones { get; set; } = string.Empty;
-        public bool Estatus { get; set; }
+        public bool Estatus { get; set; } = true;
         public string CreatedBy { get; set; } = string.Empty;
         public DateTime? CreatedDt { get; set; }
         public string UpdatedBy { get; set; } = string.Empty;

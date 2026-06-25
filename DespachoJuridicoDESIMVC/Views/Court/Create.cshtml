@@ -1,0 +1,230 @@
+﻿﻿@model DespachoJuridicoDESIMVC.Models.Court.CourtObj
+@{
+    ViewBag.Title = "Creación de juzgados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>@(Model.Id > 0 ? "Editar Juzgado" : "Nuevo Juzgado")</h2>
+            <p class="page-subtitle">@(Model.Id > 0 ? "Modificar información del juzgado" : "Registrar nuevo juzgado")</p>
+        </div>
+
+        @using (Html.BeginForm("SaveOrUpdateCourt", "Court", FormMethod.Post, new { @id = "frmCourtCrud" }))
+        {
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.CreatedBy)
+            @Html.HiddenFor(x => x.CreatedDt)
+            @Html.HiddenFor(x => x.UpdatedBy)
+            @Html.HiddenFor(x => x.UpdatedDt)
+            @Html.HiddenFor(x => x.Estatus)
+
+            <!-- Sección Información Básica -->
+            <div class="form-section">
+                <h3 class="section-title">Información del Juzgado</h3>
+
+                <div class="row">
+                    <!-- Nombre -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Nombre *</label>
+                            @Html.TextBoxFor(x => x.Nombre, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Nombre del juzgado",
+                                @maxlength = "100"
+                            })
+                            @Html.ValidationMessageFor(x => x.Nombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            @Html.TextBoxFor(x => x.Telefono, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Teléfono del juzgado",
+                                @maxlength = "20"
+                            })
+                        </div>
+                    </div>
+
+                    <!-- Horario -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Horario</label>
+                            @Html.TextBoxFor(x => x.Horario, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Ej: Lunes a Viernes 9:00-18:00",
+                                @maxlength = "100"
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Ubicación -->
+            <div class="form-section">
+                <h3 class="section-title">Ubicación</h3>
+
+                <div class="row">
+                    <!-- Dirección -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Dirección</label>
+                            @Html.TextBoxFor(x => x.Direccion, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Calle y número",
+                                @maxlength = "200"
+                            })
+                        </div>
+                    </div>
+
+                    <!-- Colonia -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Colonia</label>
+                            @Html.TextBoxFor(x => x.Colonia, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Colonia",
+                                @maxlength = "100"
+                            })
+                        </div>
+                    </div>
+
+                    <!-- Código Postal -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Código Postal</label>
+                            @Html.TextBoxFor(x => x.CodigoPostal, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Código Postal",
+                                @maxlength = "10"
+                            })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Ciudad -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Ciudad</label>
+                            @Html.TextBoxFor(x => x.Ciudad, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Ciudad",
+                                @maxlength = "100"
+                            })
+                        </div>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Estado</label>
+                            @Html.TextBoxFor(x => x.Estado, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Estado",
+                                @maxlength = "100"
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Observaciones -->
+            <div class="form-section">
+                <h3 class="section-title">Observaciones</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Observaciones</label>
+                            @Html.TextAreaFor(x => x.Observaciones, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Observaciones adicionales sobre el juzgado...",
+                                @rows = "4",
+                                @maxlength = "500"
+                            })
+                            <div class="text-right char-counter">
+                                <span id="observacionesContador">@(Model.Observaciones?.Length ?? 0)</span>/500 caracteres
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="form-actions">
+                <a href="@Url.Action("Index", "Court")" class="btn btn-default">
+                    <i class="fa fa-times"></i> Cancelar
+                </a>
+                @if (Model.Id > 0)
+                {
+                    <button type="button" class="btn btn-danger" id="btnEliminar" data-id="@Model.Id">
+                        <i class="fa fa-trash"></i> Eliminar
+                    </button>
+                }
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save"></i> @(Model.Id > 0 ? "Actualizar" : "Guardar")
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<script>
+    $(function () {
+        // Contador de caracteres para observaciones
+        $('#Observaciones').on('input', function () {
+            $('#observacionesContador').text($(this).val().length);
+        });
+
+        // Validación del formulario
+        $("#frmCourtCrud").validate({
+            rules: {
+                "Nombre": "required"
+            },
+            messages: {
+                "Nombre": "El nombre del juzgado es requerido"
+            },
+            errorClass: "text-danger",
+            errorElement: "span"
+        });
+
+        // Eliminar juzgado
+        $('#btnEliminar').click(function () {
+            if (confirm('¿Está seguro de eliminar este juzgado? Esta acción no se puede deshacer.')) {
+                const id = $(this).data('id');
+
+                $.ajax({
+                    url: '@Url.Action("DeleteCourt", "Court")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.href = '@Url.Action("Index", "Court")';
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error al eliminar el juzgado');
+                    }
+                });
+            }
+        });
+    });
+</script>
