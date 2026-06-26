@@ -4,6 +4,8 @@ using Court.Application;
 using Court.Proxy;
 using Customer.Application;
 using Customer.Proxy;
+using EventType.Application;
+using EventType.Proxy;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
@@ -59,6 +61,9 @@ namespace DespachoJuridicoDESIWebApi.App_Start
 
             container.RegisterType<ICourtProxy, CourtProxy>(new HierarchicalLifetimeManager());
             container.RegisterType<ICourtApp, CourtApp>(new HierarchicalLifetimeManager()); // Si existe
+
+            container.RegisterType<IEventTypeProxy, EventTypeProxy>(new HierarchicalLifetimeManager());
+            container.RegisterType<IEventTypeApp, EventTypeApp>(new HierarchicalLifetimeManager());
 
             // Asignar resolver a Web API
             config.DependencyResolver = new UnityDependencyResolver(container);

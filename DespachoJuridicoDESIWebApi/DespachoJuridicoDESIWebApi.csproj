@@ -160,6 +160,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AutenticationController.cs" />
     <Compile Include="Controllers\CourtController.cs" />
+    <Compile Include="Controllers\EventTypeController.cs" />
     <Compile Include="Controllers\RecorController.cs" />
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -233,6 +234,22 @@
     <ProjectReference Include="..\Customer.Proxy\Customer.Proxy.csproj">
       <Project>{545C903A-5A32-49EB-8B96-E3BD6E0B78C4}</Project>
       <Name>Customer.Proxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventType.Application\EventType.Application.csproj">
+      <Project>{C8F035D8-3DA8-4A6B-9922-9319B70929B2}</Project>
+      <Name>EventType.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventType.Domain\EventType.Domain.csproj">
+      <Project>{D87BB2BF-44A7-4AF1-95EC-F667315ECC8C}</Project>
+      <Name>EventType.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventType.Messages\EventType.Messages.csproj">
+      <Project>{2F60FF1C-771A-484B-A8DD-D265F29C55BA}</Project>
+      <Name>EventType.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventType.Proxy\EventType.Proxy.csproj">
+      <Project>{CE373D9B-280B-4B9C-9BD3-C5046627B695}</Project>
+      <Name>EventType.Proxy</Name>
     </ProjectReference>
     <ProjectReference Include="..\Record.Application\Record.Application.csproj">
       <Project>{548B3BB6-DD13-4B90-91EA-23E1CB162961}</Project>
