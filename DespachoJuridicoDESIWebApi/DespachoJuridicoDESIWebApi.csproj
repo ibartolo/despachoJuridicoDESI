@@ -159,6 +159,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AutenticationController.cs" />
+    <Compile Include="Controllers\AgendaController.cs" />
     <Compile Include="Controllers\CourtController.cs" />
     <Compile Include="Controllers\EventTypeController.cs" />
     <Compile Include="Controllers\RecorController.cs" />
@@ -183,6 +184,22 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Agenda.Application\Agenda.Application.csproj">
+      <Project>{7E869509-0EC5-4AFB-9998-6150EC8B25FF}</Project>
+      <Name>Agenda.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Agenda.Domain\Agenda.Domain.csproj">
+      <Project>{F42206A8-EB42-4FBA-B956-B1070FE1F308}</Project>
+      <Name>Agenda.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Agenda.Messagess\Agenda.Messagess.csproj">
+      <Project>{DA1FFB7F-51D5-4098-954F-ED5E44C8C2EE}</Project>
+      <Name>Agenda.Messagess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Agenda.Proxy\Agenda.Proxy.csproj">
+      <Project>{5C416262-27E4-4AE6-95DF-2BEA040970BE}</Project>
+      <Name>Agenda.Proxy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Case.Application\Case.Application.csproj">
       <Project>{3560C5CE-FAF6-4A6C-8117-35FF37593FF2}</Project>
       <Name>Case.Application</Name>

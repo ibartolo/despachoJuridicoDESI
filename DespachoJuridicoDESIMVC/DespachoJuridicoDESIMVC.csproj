@@ -116,6 +116,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RecordController.cs" />
     <Compile Include="DAL\HttpClientBase.cs" />
+    <Compile Include="DAL\HttpClientConnection.Agenda.cs" />
     <Compile Include="DAL\HttpClientConnection.Autentication.cs" />
     <Compile Include="DAL\HttpClientConnection.Case.cs" />
     <Compile Include="DAL\HttpClientConnection.Court.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\FiltersHelper.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
+    <Compile Include="Models\Agenda\AgendaObj.cs" />
     <Compile Include="Models\Autentication\Token.cs" />
     <Compile Include="Models\Autentication\TokenCookie.cs" />
     <Compile Include="Models\Autentication\UserObj.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Models\Customer\ClientObj.cs" />
     <Compile Include="Models\EventType\EventTypeObj.cs" />
     <Compile Include="Models\IAuditable.cs" />
+    <Compile Include="Models\Messages\AgendaMessages.cs" />
     <Compile Include="Models\Messages\CaseMessages.cs" />
     <Compile Include="Models\Messages\ClientMessages.cs" />
     <Compile Include="Models\Messages\CourtMessages.cs" />

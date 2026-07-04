@@ -1,4 +1,6 @@
-﻿using Case.Application;
+﻿using Agenda.Application;
+using Agenda.Proxy;
+using Case.Application;
 using Case.Proxy;
 using Court.Application;
 using Court.Proxy;
@@ -64,6 +66,9 @@ namespace DespachoJuridicoDESIWebApi.App_Start
 
             container.RegisterType<IEventTypeProxy, EventTypeProxy>(new HierarchicalLifetimeManager());
             container.RegisterType<IEventTypeApp, EventTypeApp>(new HierarchicalLifetimeManager());
+
+            container.RegisterType<IAgendaProxy, AgendaProxy>(new HierarchicalLifetimeManager());
+            container.RegisterType<IAgendaApp, AgendaApp>(new HierarchicalLifetimeManager());
 
             // Asignar resolver a Web API
             config.DependencyResolver = new UnityDependencyResolver(container);

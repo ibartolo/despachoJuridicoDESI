@@ -20,7 +20,73 @@
         border-radius: 4px;
         padding: 2px 4px;
     }
+
+    .fc-event-tooltip {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 300px;
+    }
+
+    .modal-wide .modal-dialog {
+        width: 800px;
+        max-width: 95%;
+    }
+
+    .form-group.required label:after {
+        content: " *";
+        color: #e74c3c;
+    }
+
+    .char-counter {
+        font-size: 12px;
+        color: #999;
+        margin-top: 5px;
+    }
+
+    /* Loader de página */
+    #pageLoader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.85);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #pageLoader .spinner {
+        width: 60px;
+        height: 60px;
+        border: 6px solid #e1e5eb;
+        border-top-color: #3498db;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    #pageLoader p {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    @@keyframes spin {
+        to { transform: rotate(360deg); }
+    }
 </style>
+
+<!-- Loader de página -->
+<div id="pageLoader">
+    <div class="spinner"></div>
+    <p><i class="fa fa-calendar"></i> Cargando calendario...</p>
+</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -36,6 +102,11 @@
         <div class="form-container">
             <div class="row">
                 <div class="col-md-12">
+                    <div style="margin-bottom: 15px; text-align: right;">
+                        <button type="button" class="btn btn-success" id="btnNuevaCita">
+                            <i class="fa fa-plus"></i> Nueva Cita
+                        </button>
+                    </div>
                     <div id='calendar'></div>
                 </div>
             </div>
@@ -43,993 +114,344 @@
     </div>
 </div>
 
+<!-- Modal para Nueva Cita -->
+<div class="modal fade modal-wide" id="modalNuevaCita" tabindex="-1" role="dialog" aria-labelledby="modalNuevaCitaLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #2c3e50; color: white; border-radius: 6px 6px 0 0;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalNuevaCitaLabel">
+                    <i class="fa fa-calendar-plus-o"></i> Nueva Cita
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!-- Loading -->
+                <div id="loadingModal" style="text-align: center; padding: 30px; display: none;">
+                    <i class="fa fa-spinner fa-spin fa-3x" style="color: #3498db;"></i>
+                    <p style="margin-top: 15px;">Cargando datos...</p>
+                </div>
+
+                <!-- Formulario -->
+                <form id="frmAgenda" style="display: none;">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Título -->
+                    <div class="form-group required">
+                        <label for="Titulo">Título</label>
+                        <input type="text" class="form-control" id="Titulo" name="Titulo" placeholder="Ingresa el título de la cita" maxlength="250" required>
+                    </div>
+
+                    <!-- Caso (DDL) -->
+                    <div class="form-group required">
+                        <label for="CasoId">Caso</label>
+                        <select class="form-control" id="CasoId" name="CasoId" required>
+                            <option value="">Cargando casos...</option>
+                        </select>
+                    </div>
+
+                    <!-- Tipo de Evento (DDL) -->
+                    <div class="form-group required">
+                        <label for="TipoEventoId">Tipo de Evento</label>
+                        <select class="form-control" id="TipoEventoId" name="TipoEventoId" required>
+                            <option value="">Cargando tipos de evento...</option>
+                        </select>
+                    </div>
+
+                    <!-- Fecha Inicio -->
+                    <div class="form-group required">
+                        <label for="FechaInicio">Fecha y Hora de Inicio</label>
+                        <!-- VERSIÓN 1: datetime-local de HTML5 (descomentar para usar) -->
+                        <input type="datetime-local" class="form-control" id="FechaInicio" name="FechaInicio" required>
+                        <!-- VERSIÓN 2: Datepicker de Bootstrap (comentar/descomentar para probar)
+                        <div class="input-group date" id="datetimepicker">
+                            <input type="text" class="form-control" id="FechaInicio" name="FechaInicio" placeholder="DD/MM/YYYY HH:mm" required>
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        -->
+                    </div>
+
+                    <!-- Fecha Fin -->
+                    <div class="form-group">
+                        <label for="FechaFin">Fecha y Hora de Fin (Opcional)</label>
+                        <!-- VERSIÓN 1: datetime-local de HTML5 (descomentar para usar) -->
+                        <input type="datetime-local" class="form-control" id="FechaFin" name="FechaFin">
+                        <!-- VERSIÓN 2: Datepicker de Bootstrap (comentar/descomentar para probar)
+                        <div class="input-group date" id="datetimepickerFin">
+                            <input type="text" class="form-control" id="FechaFin" name="FechaFin" placeholder="DD/MM/YYYY HH:mm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        -->
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group">
+                        <label for="Descripcion">Descripción / Comentarios</label>
+                        <textarea class="form-control" id="Descripcion" name="Descripcion" rows="3" maxlength="500" placeholder="Comentarios adicionales sobre la cita..."></textarea>
+                        <div class="text-right char-counter">
+                            <span id="descripcionContador">0</span>/500 caracteres
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnGuardarCita">
+                    <i class="fa fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    var calendar;
+    var casosCargados = false;
+    var eventTypesCargados = false;
+    var eventosCargados = false;
+
+    $(document).ready(function () {
+        // Mostrar loader de página al inicio
+        $('#pageLoader').show();
+
+        // Inicializar calendario
         var calendarEl = document.getElementById('calendar');
 
-        // Eventos del 1 al 10 de junio 2026 (omite sábados y domingos)
-        var eventos = [
-            // 1 de junio 2026 - Lunes
-            {
-                "id": 1,
-                "title": "Audiencia - Caso C-2026-0001",
-                "start": "2026-06-01T09:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 2,
-                "title": "Reunión con cliente - María González",
-                "start": "2026-06-01T11:30:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 3,
-                "title": "Entrega de documentos - Caso C-2026-0002",
-                "start": "2026-06-01T15:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 4,
-                "title": "Revisión de expediente - EXP-2026-0001",
-                "start": "2026-06-01T17:00:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 5,
-                "title": "Cita con cliente - Pedro Martínez",
-                "start": "2026-06-01T19:00:00",
-                "color": "#1abc9c"
-            },
-
-            // 2 de junio 2026 - Martes
-            {
-                "id": 6,
-                "title": "Audiencia laboral - Martínez vs. Empresa XYZ",
-                "start": "2026-06-02T10:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 7,
-                "title": "Cita con cliente - Carlos Ruiz",
-                "start": "2026-06-02T13:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 8,
-                "title": "Firma de contrato - Inmobiliaria Sol",
-                "start": "2026-06-02T16:00:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 9,
-                "title": "Revisión de contrato - Empresa Constructora",
-                "start": "2026-06-02T18:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 10,
-                "title": "Entrega de expediente - EXP-2026-0002",
-                "start": "2026-06-02T20:00:00",
-                "color": "#9b59b6"
-            },
-
-            // 3 de junio 2026 - Miércoles
-            {
-                "id": 11,
-                "title": "Juicio ordinario civil - Caso C-2026-0003",
-                "start": "2026-06-03T09:30:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 12,
-                "title": "Reunión con cliente - Laura Díaz",
-                "start": "2026-06-03T12:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 13,
-                "title": "Entrega de documentos - Caso C-2026-0004",
-                "start": "2026-06-03T15:30:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 14,
-                "title": "Revisión de expediente - EXP-2026-0003",
-                "start": "2026-06-03T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 15,
-                "title": "Cita con cliente - José Hernández",
-                "start": "2026-06-03T19:30:00",
-                "color": "#1abc9c"
-            },
-
-            // 4 de junio 2026 - Jueves
-            {
-                "id": 16,
-                "title": "Audiencia - Caso C-2026-0005",
-                "start": "2026-06-04T08:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 17,
-                "title": "Cita con cliente - Pedro Hernández",
-                "start": "2026-06-04T11:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 18,
-                "title": "Firma de acuerdo - Divorcio López-Martínez",
-                "start": "2026-06-04T14:00:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 19,
-                "title": "Revisión de contrato - Grupo Empresarial",
-                "start": "2026-06-04T16:30:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 20,
-                "title": "Entrega de expediente - EXP-2026-0004",
-                "start": "2026-06-04T18:30:00",
-                "color": "#9b59b6"
-            },
-
-            // 5 de junio 2026 - Viernes
-            {
-                "id": 21,
-                "title": "Juicio laboral - González vs. Empresa ABC",
-                "start": "2026-06-05T09:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 22,
-                "title": "Reunión con cliente - Ana López",
-                "start": "2026-06-05T12:30:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 23,
-                "title": "Entrega de expediente - EXP-2026-0005",
-                "start": "2026-06-05T15:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 24,
-                "title": "Cita con cliente - Miguel Torres",
-                "start": "2026-06-05T17:30:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 25,
-                "title": "Revisión de documentos - Caso C-2026-0006",
-                "start": "2026-06-05T19:30:00",
-                "color": "#3498db"
-            },
-
-            // 8 de junio 2026 - Lunes
-            {
-                "id": 26,
-                "title": "Audiencia - Caso C-2026-0007",
-                "start": "2026-06-08T10:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 27,
-                "title": "Cita con cliente - Roberto Sánchez",
-                "start": "2026-06-08T13:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 28,
-                "title": "Firma de contrato - Comercializadora del Norte",
-                "start": "2026-06-08T15:30:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 29,
-                "title": "Revisión de expediente - EXP-2026-0006",
-                "start": "2026-06-08T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 30,
-                "title": "Entrega de documentos - Caso C-2026-0008",
-                "start": "2026-06-08T19:30:00",
-                "color": "#f39c12"
-            },
-
-            // 9 de junio 2026 - Martes
-            {
-                "id": 31,
-                "title": "Juicio civil - Caso C-2026-0009",
-                "start": "2026-06-09T09:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 32,
-                "title": "Reunión con cliente - Elena Torres",
-                "start": "2026-06-09T11:30:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 33,
-                "title": "Entrega de documentos - Caso C-2026-0010",
-                "start": "2026-06-09T14:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 34,
-                "title": "Revisión de contrato - Grupo Empresarial",
-                "start": "2026-06-09T16:30:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 35,
-                "title": "Audiencia vespertina - Caso C-2026-0011",
-                "start": "2026-06-09T18:30:00",
-                "color": "#3498db"
-            },
-
-            // 10 de junio 2026 - Miércoles
-            {
-                "id": 36,
-                "title": "Audiencia - Caso C-2026-0012",
-                "start": "2026-06-10T08:30:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 37,
-                "title": "Reunión con cliente - Fernando Castro",
-                "start": "2026-06-10T11:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 38,
-                "title": "Firma de acuerdo - Mediación laboral",
-                "start": "2026-06-10T14:30:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 39,
-                "title": "Entrega de expediente - EXP-2026-0007",
-                "start": "2026-06-10T17:00:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 40,
-                "title": "Cita con cliente - Daniel Reyes",
-                "start": "2026-06-10T19:00:00",
-                "color": "#1abc9c"
-            },
-
-            // 11 de junio 2026 - Jueves
-            {
-                "id": 41,
-                "title": "Audiencia - Caso C-2026-0013",
-                "start": "2026-06-11T09:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 42,
-                "title": "Reunión con cliente - Patricia Soto",
-                "start": "2026-06-11T12:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 43,
-                "title": "Entrega de documentos - Caso C-2026-0014",
-                "start": "2026-06-11T15:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 44,
-                "title": "Revisión de expediente - EXP-2026-0008",
-                "start": "2026-06-11T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 45,
-                "title": "Cita con cliente - Jorge Ramírez",
-                "start": "2026-06-11T19:30:00",
-                "color": "#1abc9c"
-            },
-
-            // 12 de junio 2026 - Viernes
-            {
-                "id": 46,
-                "title": "Juicio civil - Caso C-2026-0015",
-                "start": "2026-06-12T10:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 47,
-                "title": "Reunión con cliente - Susana Martínez",
-                "start": "2026-06-12T13:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 48,
-                "title": "Firma de contrato - Inversiones del Golfo",
-                "start": "2026-06-12T15:30:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 49,
-                "title": "Entrega de expediente - EXP-2026-0009",
-                "start": "2026-06-12T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 50,
-                "title": "Revisión de documentos - Caso C-2026-0016",
-                "start": "2026-06-12T19:30:00",
-                "color": "#3498db"
-            },
-
-            // 15 de junio 2026 - Lunes
-            {
-                "id": 51,
-                "title": "Audiencia - Caso C-2026-0017",
-                "start": "2026-06-15T08:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 52,
-                "title": "Cita con cliente - Ricardo Flores",
-                "start": "2026-06-15T11:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 53,
-                "title": "Entrega de documentos - Caso C-2026-0018",
-                "start": "2026-06-15T14:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 54,
-                "title": "Revisión de expediente - EXP-2026-0010",
-                "start": "2026-06-15T16:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 55,
-                "title": "Reunión con cliente - Teresa Álvarez",
-                "start": "2026-06-15T18:30:00",
-                "color": "#2ecc71"
-            },
-
-            // 16 de junio 2026 - Martes
-            {
-                "id": 56,
-                "title": "Juicio laboral - Pérez vs. Empresa XYZ",
-                "start": "2026-06-16T09:30:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 57,
-                "title": "Reunión con cliente - Andrés Medina",
-                "start": "2026-06-16T12:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 58,
-                "title": "Firma de acuerdo - Divorcio Ruiz-García",
-                "start": "2026-06-16T15:00:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 59,
-                "title": "Entrega de expediente - EXP-2026-0011",
-                "start": "2026-06-16T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 60,
-                "title": "Revisión de contrato - Corporativo del Norte",
-                "start": "2026-06-16T19:30:00",
-                "color": "#f39c12"
-            },
-
-            // 17 de junio 2026 - Miércoles
-            {
-                "id": 61,
-                "title": "Audiencia - Caso C-2026-0019",
-                "start": "2026-06-17T10:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 62,
-                "title": "Cita con cliente - Lorena Gómez",
-                "start": "2026-06-17T13:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 63,
-                "title": "Entrega de documentos - Caso C-2026-0020",
-                "start": "2026-06-17T15:30:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 64,
-                "title": "Revisión de expediente - EXP-2026-0012",
-                "start": "2026-06-17T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 65,
-                "title": "Reunión con cliente - Mario Vega",
-                "start": "2026-06-17T19:30:00",
-                "color": "#2ecc71"
-            },
-
-            // 18 de junio 2026 - Jueves
-            {
-                "id": 66,
-                "title": "Juicio civil - Caso C-2026-0021",
-                "start": "2026-06-18T09:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 67,
-                "title": "Cita con cliente - Carla Mendoza",
-                "start": "2026-06-18T12:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 68,
-                "title": "Firma de contrato - Desarrollos Inmobiliarios",
-                "start": "2026-06-18T15:00:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 69,
-                "title": "Entrega de expediente - EXP-2026-0013",
-                "start": "2026-06-18T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 70,
-                "title": "Revisión de documentos - Caso C-2026-0022",
-                "start": "2026-06-18T19:30:00",
-                "color": "#3498db"
-            },
-
-            // 19 de junio 2026 - Viernes
-            {
-                "id": 71,
-                "title": "Audiencia - Caso C-2026-0023",
-                "start": "2026-06-19T08:30:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 72,
-                "title": "Reunión con cliente - Fernando García",
-                "start": "2026-06-19T11:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 73,
-                "title": "Entrega de documentos - Caso C-2026-0024",
-                "start": "2026-06-19T14:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 74,
-                "title": "Revisión de expediente - EXP-2026-0014",
-                "start": "2026-06-19T16:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 75,
-                "title": "Cita con cliente - Óscar Ramírez",
-                "start": "2026-06-19T18:30:00",
-                "color": "#1abc9c"
-            },
-
-            // 22 de junio 2026 - Lunes
-            {
-                "id": 76,
-                "title": "Juicio laboral - Torres vs. Empresa ABC",
-                "start": "2026-06-22T10:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 77,
-                "title": "Reunión con cliente - Claudia Pérez",
-                "start": "2026-06-22T13:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 78,
-                "title": "Firma de acuerdo - Mediación civil",
-                "start": "2026-06-22T15:30:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 79,
-                "title": "Entrega de expediente - EXP-2026-0015",
-                "start": "2026-06-22T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 80,
-                "title": "Revisión de contrato - Grupo Financiero",
-                "start": "2026-06-22T19:30:00",
-                "color": "#f39c12"
-            },
-
-            // 23 de junio 2026 - Martes
-            {
-                "id": 81,
-                "title": "Audiencia - Caso C-2026-0025",
-                "start": "2026-06-23T09:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 82,
-                "title": "Cita con cliente - David Salazar",
-                "start": "2026-06-23T12:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 83,
-                "title": "Entrega de documentos - Caso C-2026-0026",
-                "start": "2026-06-23T14:30:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 84,
-                "title": "Revisión de expediente - EXP-2026-0016",
-                "start": "2026-06-23T16:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 85,
-                "title": "Reunión con cliente - Rosa Fernández",
-                "start": "2026-06-23T18:30:00",
-                "color": "#2ecc71"
-            },
-
-            // 24 de junio 2026 - Miércoles
-            {
-                "id": 86,
-                "title": "Juicio civil - Caso C-2026-0027",
-                "start": "2026-06-24T08:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 87,
-                "title": "Cita con cliente - Tomás Herrera",
-                "start": "2026-06-24T11:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 88,
-                "title": "Firma de contrato - Constructora del Sureste",
-                "start": "2026-06-24T14:00:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 89,
-                "title": "Entrega de expediente - EXP-2026-0017",
-                "start": "2026-06-24T16:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 90,
-                "title": "Revisión de documentos - Caso C-2026-0028",
-                "start": "2026-06-24T18:30:00",
-                "color": "#3498db"
-            },
-
-            // 25 de junio 2026 - Jueves
-            {
-                "id": 91,
-                "title": "Audiencia - Caso C-2026-0029",
-                "start": "2026-06-25T09:30:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 92,
-                "title": "Reunión con cliente - Verónica Castro",
-                "start": "2026-06-25T12:30:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 93,
-                "title": "Entrega de documentos - Caso C-2026-0030",
-                "start": "2026-06-25T15:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 94,
-                "title": "Revisión de expediente - EXP-2026-0018",
-                "start": "2026-06-25T17:00:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 95,
-                "title": "Cita con cliente - Hugo Márquez",
-                "start": "2026-06-25T19:00:00",
-                "color": "#1abc9c"
-            },
-
-            // 26 de junio 2026 - Viernes
-            {
-                "id": 96,
-                "title": "Juicio laboral - Ramírez vs. Empresa XYZ",
-                "start": "2026-06-26T10:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 97,
-                "title": "Reunión con cliente - Leticia Ponce",
-                "start": "2026-06-26T13:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 98,
-                "title": "Firma de acuerdo - Divorcio Vargas-López",
-                "start": "2026-06-26T15:30:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 99,
-                "title": "Entrega de expediente - EXP-2026-0019",
-                "start": "2026-06-26T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 100,
-                "title": "Revisión de contrato - Empresa de Servicios",
-                "start": "2026-06-26T19:30:00",
-                "color": "#f39c12"
-            },
-
-            // 29 de junio 2026 - Lunes
-            {
-                "id": 101,
-                "title": "Audiencia - Caso C-2026-0031",
-                "start": "2026-06-29T08:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 102,
-                "title": "Cita con cliente - Alberto Morales",
-                "start": "2026-06-29T11:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 103,
-                "title": "Entrega de documentos - Caso C-2026-0032",
-                "start": "2026-06-29T14:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 104,
-                "title": "Revisión de expediente - EXP-2026-0020",
-                "start": "2026-06-29T16:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 105,
-                "title": "Reunión con cliente - Isabel Ortega",
-                "start": "2026-06-29T18:30:00",
-                "color": "#2ecc71"
-            },
-
-            // 30 de junio 2026 - Martes
-            {
-                "id": 106,
-                "title": "Juicio civil - Caso C-2026-0033",
-                "start": "2026-06-30T09:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 107,
-                "title": "Cita con cliente - Esteban Rojas",
-                "start": "2026-06-30T12:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 108,
-                "title": "Firma de contrato - Tecnologías del Golfo",
-                "start": "2026-06-30T15:00:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 109,
-                "title": "Entrega de expediente - EXP-2026-0021",
-                "start": "2026-06-30T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 110,
-                "title": "Revisión de documentos - Caso C-2026-0034",
-                "start": "2026-06-30T19:30:00",
-                "color": "#3498db"
-            },
-
-            // 1 de julio 2026 - Miércoles
-            {
-                "id": 111,
-                "title": "Audiencia - Caso C-2026-0035",
-                "start": "2026-07-01T09:30:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 112,
-                "title": "Reunión con cliente - Gabriela Santos",
-                "start": "2026-07-01T12:30:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 113,
-                "title": "Entrega de documentos - Caso C-2026-0036",
-                "start": "2026-07-01T15:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 114,
-                "title": "Revisión de expediente - EXP-2026-0022",
-                "start": "2026-07-01T17:00:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 115,
-                "title": "Cita con cliente - Eduardo Flores",
-                "start": "2026-07-01T19:00:00",
-                "color": "#1abc9c"
-            },
-
-            // 2 de julio 2026 - Jueves
-            {
-                "id": 116,
-                "title": "Juicio laboral - Gómez vs. Empresa ABC",
-                "start": "2026-07-02T10:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 117,
-                "title": "Reunión con cliente - Sara Jiménez",
-                "start": "2026-07-02T13:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 118,
-                "title": "Firma de acuerdo - Mediación familiar",
-                "start": "2026-07-02T15:30:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 119,
-                "title": "Entrega de expediente - EXP-2026-0023",
-                "start": "2026-07-02T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 120,
-                "title": "Revisión de contrato - Industrias del Norte",
-                "start": "2026-07-02T19:30:00",
-                "color": "#f39c12"
-            },
-
-            // 3 de julio 2026 - Viernes
-            {
-                "id": 121,
-                "title": "Audiencia - Caso C-2026-0037",
-                "start": "2026-07-03T08:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 122,
-                "title": "Cita con cliente - Pablo Tovar",
-                "start": "2026-07-03T11:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 123,
-                "title": "Entrega de documentos - Caso C-2026-0038",
-                "start": "2026-07-03T14:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 124,
-                "title": "Revisión de expediente - EXP-2026-0024",
-                "start": "2026-07-03T16:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 125,
-                "title": "Reunión con cliente - Mariana Ruiz",
-                "start": "2026-07-03T18:30:00",
-                "color": "#2ecc71"
-            },
-
-            // 6 de julio 2026 - Lunes
-            {
-                "id": 126,
-                "title": "Juicio civil - Caso C-2026-0039",
-                "start": "2026-07-06T09:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 127,
-                "title": "Cita con cliente - Alfonso Cruz",
-                "start": "2026-07-06T12:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 128,
-                "title": "Firma de contrato - Desarrollos Urbanos",
-                "start": "2026-07-06T15:00:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 129,
-                "title": "Entrega de expediente - EXP-2026-0025",
-                "start": "2026-07-06T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 130,
-                "title": "Revisión de documentos - Caso C-2026-0040",
-                "start": "2026-07-06T19:30:00",
-                "color": "#3498db"
-            },
-
-            // 7 de julio 2026 - Martes
-            {
-                "id": 131,
-                "title": "Audiencia - Caso C-2026-0041",
-                "start": "2026-07-07T09:30:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 132,
-                "title": "Reunión con cliente - Silvia Paredes",
-                "start": "2026-07-07T12:30:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 133,
-                "title": "Entrega de documentos - Caso C-2026-0042",
-                "start": "2026-07-07T15:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 134,
-                "title": "Revisión de expediente - EXP-2026-0026",
-                "start": "2026-07-07T17:00:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 135,
-                "title": "Cita con cliente - Daniela Mora",
-                "start": "2026-07-07T19:00:00",
-                "color": "#1abc9c"
-            },
-
-            // 8 de julio 2026 - Miércoles
-            {
-                "id": 136,
-                "title": "Juicio laboral - López vs. Empresa XYZ",
-                "start": "2026-07-08T10:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 137,
-                "title": "Reunión con cliente - Raúl Domínguez",
-                "start": "2026-07-08T13:00:00",
-                "color": "#2ecc71"
-            },
-            {
-                "id": 138,
-                "title": "Firma de acuerdo - Divorcio Franco-Castro",
-                "start": "2026-07-08T15:30:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 139,
-                "title": "Entrega de expediente - EXP-2026-0027",
-                "start": "2026-07-08T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 140,
-                "title": "Revisión de contrato - Corporativo del Sur",
-                "start": "2026-07-08T19:30:00",
-                "color": "#f39c12"
-            },
-
-            // 9 de julio 2026 - Jueves
-            {
-                "id": 141,
-                "title": "Audiencia - Caso C-2026-0043",
-                "start": "2026-07-09T08:00:00",
-                "color": "#3498db"
-            },
-            {
-                "id": 142,
-                "title": "Cita con cliente - Guillermo Ríos",
-                "start": "2026-07-09T11:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 143,
-                "title": "Entrega de documentos - Caso C-2026-0044",
-                "start": "2026-07-09T14:00:00",
-                "color": "#f39c12"
-            },
-            {
-                "id": 144,
-                "title": "Revisión de expediente - EXP-2026-0028",
-                "start": "2026-07-09T16:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 145,
-                "title": "Reunión con cliente - Marcela Villa",
-                "start": "2026-07-09T18:30:00",
-                "color": "#2ecc71"
-            },
-
-            // 10 de julio 2026 - Viernes
-            {
-                "id": 146,
-                "title": "Juicio civil - Caso C-2026-0045",
-                "start": "2026-07-10T09:00:00",
-                "color": "#e74c3c"
-            },
-            {
-                "id": 147,
-                "title": "Cita con cliente - Arturo Peña",
-                "start": "2026-07-10T12:00:00",
-                "color": "#1abc9c"
-            },
-            {
-                "id": 148,
-                "title": "Firma de contrato - Logística del Golfo",
-                "start": "2026-07-10T15:00:00",
-                "color": "#2c3e50"
-            },
-            {
-                "id": 149,
-                "title": "Entrega de expediente - EXP-2026-0029",
-                "start": "2026-07-10T17:30:00",
-                "color": "#9b59b6"
-            },
-            {
-                "id": 150,
-                "title": "Revisión de documentos - Caso C-2026-0046",
-                "start": "2026-07-10T19:30:00",
-                "color": "#3498db"
-            }
-        ];
-
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        calendar = new FullCalendar.Calendar(calendarEl, {
             locale: 'es',
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            initialView: 'dayGridMonth',
-            initialDate: '2026-06-01',
+            initialView: 'timeGridWeek',
             navLinks: true,
             selectable: true,
             selectMirror: true,
-            eventClick: function (arg) {
-                alert('Evento: ' + arg.event.title + '\nID: ' + arg.event.id + '\nFecha: ' + arg.event.start.toLocaleString());
-            },
             editable: true,
             dayMaxEvents: true,
-            events: eventos
+            eventClick: function (arg) {
+                alert('Evento: ' + arg.event.title +
+                    '\nID: ' + arg.event.id +
+                    '\nInicio: ' + arg.event.start.toLocaleString() +
+                    (arg.event.end ? '\nFin: ' + arg.event.end.toLocaleString() : ''));
+            },
+            loading: function (isLoading) {
+                // Cuando el calendario está cargando, mostrar loader
+                if (isLoading) {
+                    $('#pageLoader').show();
+                } else {
+                    // Cuando termina de cargar, ocultar loader
+                    $('#pageLoader').hide();
+                }
+            },
+            events: function (fetchInfo, successCallback, failureCallback) {
+                // Obtener eventos desde el servidor
+                GetMVC("/Calendar/GetAllEvents", function (r) {
+                    if (r.Result.Successful) {
+                        successCallback(r.Events);
+                        // Ocultar loader cuando los eventos se cargan correctamente
+                        $('#pageLoader').hide();
+                    } else {
+                        failureCallback(r.Result.SystemMessages[0]?.Message || 'Error al cargar eventos');
+                        // Ocultar loader incluso en caso de error
+                        $('#pageLoader').hide();
+                        alert('Error al cargar los eventos: ' + (r.Result.SystemMessages[0]?.Message || 'Error desconocido'));
+                    }
+                });
+            }
         });
 
         calendar.render();
+
+        // Evento: Botón Nueva Cita
+        $('#btnNuevaCita').click(function () {
+            // Limpiar formulario
+            $('#frmAgenda')[0].reset();
+            $('#descripcionContador').text('0');
+
+            // Cargar DDLs
+            cargarDDLs();
+
+            // Abrir modal
+            $('#modalNuevaCita').modal('show');
+        });
+
+        // Evento: Contador de caracteres
+        $('#Descripcion').on('input', function () {
+            $('#descripcionContador').text($(this).val().length);
+        });
+
+        // Evento: Guardar Cita
+        $('#btnGuardarCita').click(function () {
+            guardarCita();
+        });
+
+        // Permitir guardar con Enter
+        $('#frmAgenda').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                guardarCita();
+            }
+        });
+
+        // Evento: Onblur para asignar fecha final automáticamente
+        $('#FechaInicio').on('blur', function () {
+            var fechaInicio = $(this).val();
+            if (fechaInicio) {
+                var fecha = new Date(fechaInicio);
+                fecha.setHours(fecha.getHours() + 1);
+
+                var año = fecha.getFullYear();
+                var mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                var dia = String(fecha.getDate()).padStart(2, '0');
+                var horas = String(fecha.getHours()).padStart(2, '0');
+                var minutos = String(fecha.getMinutes()).padStart(2, '0');
+
+                var fechaFin = año + '-' + mes + '-' + dia + 'T' + horas + ':' + minutos;
+
+                // Solo asignar si el campo de fecha fin está vacío
+                if (!$('#FechaFin').val()) {
+                    $('#FechaFin').val(fechaFin);
+                }
+            }
+        });
     });
+
+    function cargarDDLs() {
+        // Mostrar loading dentro del modal
+        $('#loadingModal').show();
+        $('#frmAgenda').hide();
+
+        var casosCargadosLocal = false;
+        var eventTypesCargadosLocal = false;
+
+        // Cargar Casos
+        GetMVC("/Calendar/GetCases", function (r) {
+            if (r.Result.Successful) {
+                var $select = $('#CasoId');
+                $select.empty();
+                $select.append('<option value="">Seleccionar caso...</option>');
+
+                $.each(r.CaseObjs, function (i, item) {
+                    $select.append('<option value="' + item.Id + '">' + item.NumeroCaso + ' - ' + (item.Descripcion || 'Sin descripción') + '</option>');
+                });
+
+                casosCargadosLocal = true;
+            } else {
+                alert('Error al cargar casos: ' + (r.Result.SystemMessages[0]?.Message || 'Error desconocido'));
+            }
+            verificarCargaCompleta();
+        });
+
+        // Cargar Tipos de Evento
+        GetMVC("/Calendar/GetEventTypes", function (r) {
+            if (r.Result.Successful) {
+                var $select = $('#TipoEventoId');
+                $select.empty();
+                $select.append('<option value="">Seleccionar tipo de evento...</option>');
+
+                $.each(r.EventTypeObjs, function (i, item) {
+                    $select.append('<option value="' + item.Id + '">' + item.Nombre + (item.Descripcion ? ' - ' + item.Descripcion : '') + '</option>');
+                });
+
+                eventTypesCargadosLocal = true;
+            } else {
+                alert('Error al cargar tipos de evento: ' + (r.Result.SystemMessages[0]?.Message || 'Error desconocido'));
+            }
+            verificarCargaCompleta();
+        });
+
+        function verificarCargaCompleta() {
+            if (casosCargadosLocal && eventTypesCargadosLocal) {
+                // Ocultar loading y mostrar formulario
+                $('#loadingModal').hide();
+                $('#frmAgenda').show();
+
+                // Enfocar primer campo
+                $('#Titulo').focus();
+
+                // Agregar fecha/hora actual + 1 hora como predeterminada
+                var ahora = new Date();
+                ahora.setHours(ahora.getHours() + 1);
+                var año = ahora.getFullYear();
+                var mes = String(ahora.getMonth() + 1).padStart(2, '0');
+                var dia = String(ahora.getDate()).padStart(2, '0');
+                var horas = String(ahora.getHours()).padStart(2, '0');
+                var minutos = String(ahora.getMinutes()).padStart(2, '0');
+                $('#FechaInicio').val(año + '-' + mes + '-' + dia + 'T' + horas + ':' + minutos);
+            }
+        }
+    }
+
+    function guardarCita() {
+        // Validaciones básicas
+        var titulo = $('#Titulo').val().trim();
+        var casoId = $('#CasoId').val();
+        var tipoEventoId = $('#TipoEventoId').val();
+        var fechaInicio = $('#FechaInicio').val();
+
+        if (!titulo) {
+            alert('El título es obligatorio.');
+            $('#Titulo').focus();
+            return;
+        }
+
+        if (!casoId) {
+            alert('Debe seleccionar un caso.');
+            $('#CasoId').focus();
+            return;
+        }
+
+        if (!tipoEventoId) {
+            alert('Debe seleccionar un tipo de evento.');
+            $('#TipoEventoId').focus();
+            return;
+        }
+
+        if (!fechaInicio) {
+            alert('La fecha de inicio es obligatoria.');
+            $('#FechaInicio').focus();
+            return;
+        }
+
+        // Construir objeto
+        var agenda = {
+            Titulo: titulo,
+            CasoId: parseInt(casoId),
+            TipoEventoId: parseInt(tipoEventoId),
+            FechaInicio: fechaInicio,
+            FechaFin: $('#FechaFin').val() || null,
+            Descripcion: $('#Descripcion').val().trim() || null,
+            GoogleEventId: null,
+            SincronizadoGoogle: false,
+            FechaSincronizacion: null,
+            Estatus: true
+        };
+
+        // Mostrar loading en el botón
+        $('#btnGuardarCita').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
+
+        // Enviar al servidor
+        PostMVC("/Calendar/SaveOrUpdateAgenda", agenda, function (r) {
+            $('#btnGuardarCita').prop('disabled', false).html('<i class="fa fa-save"></i> Guardar');
+
+            if (r.success) {
+                alert(r.message);
+                // Cerrar modal
+                $('#modalNuevaCita').modal('hide');
+                // Refrescar calendario (esto mostrará el loader automáticamente)
+                calendar.refetchEvents();
+            } else {
+                alert(r.message);
+            }
+        });
+    }
 </script>
