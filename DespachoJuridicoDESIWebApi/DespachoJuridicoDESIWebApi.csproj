@@ -160,6 +160,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AutenticationController.cs" />
     <Compile Include="Controllers\AgendaController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\CourtController.cs" />
     <Compile Include="Controllers\EventTypeController.cs" />
     <Compile Include="Controllers\RecorController.cs" />
@@ -251,6 +252,22 @@
     <ProjectReference Include="..\Customer.Proxy\Customer.Proxy.csproj">
       <Project>{545C903A-5A32-49EB-8B96-E3BD6E0B78C4}</Project>
       <Name>Customer.Proxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dashboard.Application\Dashboard.Application.csproj">
+      <Project>{1C4FABFC-A2D7-4AA7-A8B5-A9AC88E4A9E3}</Project>
+      <Name>Dashboard.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dashboard.Domain\Dashboard.Domain.csproj">
+      <Project>{037D8DFB-007C-46C2-80FA-EA9BBEC645F4}</Project>
+      <Name>Dashboard.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dashboard.Messages\Dashboard.Messages.csproj">
+      <Project>{9941FCEE-42D5-4CD4-8563-ACAE146942CE}</Project>
+      <Name>Dashboard.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dashboard.Proxy\Dashboard.Proxy.csproj">
+      <Project>{FB4CBACB-58A0-4064-B354-F5F1A25FF481}</Project>
+      <Name>Dashboard.Proxy</Name>
     </ProjectReference>
     <ProjectReference Include="..\EventType.Application\EventType.Application.csproj">
       <Project>{C8F035D8-3DA8-4A6B-9922-9319B70929B2}</Project>

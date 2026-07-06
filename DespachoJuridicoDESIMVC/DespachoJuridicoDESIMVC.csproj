@@ -122,6 +122,7 @@
     <Compile Include="DAL\HttpClientConnection.Court.cs" />
     <Compile Include="DAL\HttpClientConnection.cs" />
     <Compile Include="DAL\HttpClientConnection.Customer.cs" />
+    <Compile Include="DAL\HttpClientConnection.Dashboard.cs" />
     <Compile Include="DAL\HttpClientConnection.EventType.cs" />
     <Compile Include="DAL\HttpClientConnection.Record.cs" />
     <Compile Include="Global.asax.cs">
@@ -139,6 +140,7 @@
     <Compile Include="Models\Case\EstatusCasoObj.cs" />
     <Compile Include="Models\Court\CourtObj.cs" />
     <Compile Include="Models\Customer\ClientObj.cs" />
+    <Compile Include="Models\Dashboard\DashboardObj.cs" />
     <Compile Include="Models\EventType\EventTypeObj.cs" />
     <Compile Include="Models\IAuditable.cs" />
     <Compile Include="Models\Messages\AgendaMessages.cs" />
