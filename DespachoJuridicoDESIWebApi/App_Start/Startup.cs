@@ -1,10 +1,20 @@
-﻿using Case.Application;
+﻿using Agenda.Application;
+using Agenda.Proxy;
+using Case.Application;
 using Case.Proxy;
+using Court.Application;
+using Court.Proxy;
 using Customer.Application;
 using Customer.Proxy;
+using Dashboard.Application;
+using Dashboard.Proxy;
+using EventType.Application;
+using EventType.Proxy;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
+using Record.Application;
+using Record.Proxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +59,21 @@ namespace DespachoJuridicoDESIWebApi.App_Start
             container.RegisterType<ICaseApp, CaseApp>(new HierarchicalLifetimeManager());
 
             container.RegisterType<ICaseProxy, CaseProxy>(new HierarchicalLifetimeManager());
+
+            container.RegisterType<IRecordProxy, RecordProxy>(new HierarchicalLifetimeManager());
+            container.RegisterType<IRecordApp, RecordApp>(new HierarchicalLifetimeManager());
+
+            container.RegisterType<ICourtProxy, CourtProxy>(new HierarchicalLifetimeManager());
+            container.RegisterType<ICourtApp, CourtApp>(new HierarchicalLifetimeManager()); // Si existe
+
+            container.RegisterType<IEventTypeProxy, EventTypeProxy>(new HierarchicalLifetimeManager());
+            container.RegisterType<IEventTypeApp, EventTypeApp>(new HierarchicalLifetimeManager());
+
+            container.RegisterType<IAgendaProxy, AgendaProxy>(new HierarchicalLifetimeManager());
+            container.RegisterType<IAgendaApp, AgendaApp>(new HierarchicalLifetimeManager());
+
+            container.RegisterType<IDashboardProxy, DashboardProxy>(new HierarchicalLifetimeManager());
+            container.RegisterType<IDashboardApp, DashboardApp>(new HierarchicalLifetimeManager());
 
             // Asignar resolver a Web API
             config.DependencyResolver = new UnityDependencyResolver(container);

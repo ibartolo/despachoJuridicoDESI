@@ -57,7 +57,7 @@ namespace Case.Messages
 
         public class SaveOrUpdateCaseRequest
         {
-            public CaseObj Case { get; set; }
+            public CaseEntity Case { get; set; }
         }
     }
 }

@@ -5,20 +5,16 @@ using System.Web;
 
 namespace DespachoJuridicoDESIMVC.Models.Customer
 {
-    public class ClientObj
+    public class ClienteObj
     {
-        public ClientObj()
-        {
-            Estatus = true;
-        }
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Telefono { get; set; }
-        public string Correo { get; set; }
-        public bool Estatus { get; set; }
-        public string CreatedBy { get; set; }
+        public long Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Telefono { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
+        public bool Estatus { get; set; } = true;
+        public string CreatedBy { get; set; } = string.Empty;
         public DateTime? CreatedDt { get; set; }
-        public string UpdatedBy { get; set; }
+        public string UpdatedBy { get; set; } = string.Empty;
         public DateTime? UpdatedDt { get; set; }
     }
 

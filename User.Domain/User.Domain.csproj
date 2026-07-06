@@ -45,6 +45,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Case.Domain\Case.Domain.csproj">
+      <Project>{A9813BD1-C657-443D-A029-1535CFEF2F42}</Project>
+      <Name>Case.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common.Domain\Common.Domain.csproj">
       <Project>{32430AC5-C0F5-4AA7-9773-263AA67D5E54}</Project>
       <Name>Common.Domain</Name>

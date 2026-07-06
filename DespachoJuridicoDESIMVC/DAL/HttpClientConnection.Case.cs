@@ -48,7 +48,10 @@ namespace DespachoJuridicoDESIMVC.DAL
         }
         public async Task<CaseMessagesResponse> SaveOrUpdateCase(CaseObj caseObj)
         {
-            var result = await RequestAsync<object>("api/Case", HttpMethod.Post, caseObj,
+            var requetes = new {
+                Case = caseObj
+            };
+            var result = await RequestAsync<object>("api/Case", HttpMethod.Post, requetes,
                 new Func<string, string>((responseString) =>
                 {
                     return responseString;

@@ -1,0 +1,67 @@
+﻿﻿@{
+    ViewBag.Title = "Visor de juzgados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/2.3.7/js/dataTables.js"></script>
+
+<div class="row">
+    <div class="col-md-12">
+        <a href="/Court/Create" class="btn btn-success">Nuevo Juzgado</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table" id="tblCourts">
+        </table>
+    </div>
+</div>
+
+<script>
+    var tbl;
+    var arrayItems;
+
+    $(document).ready(function () {
+        GetAllCourts();
+    });
+
+    function GetAllCourts() {
+        GetMVC("/Court/GetAllCourts", function (r) {
+            if (r.Result.Successful) {
+                arrayItems = r.CourtObjs;
+                tbl = $("#tblCourts").DataTable(
+                    {
+                        data: arrayItems,
+                        columns: [
+                            { data: "Id", title: "Id" },
+                            { data: "Nombre", title: "Nombre" },
+                            { data: "Direccion", title: "Dirección" },
+                            { data: "Colonia", title: "Colonia" },
+                            { data: "Ciudad", title: "Ciudad" },
+                            { data: "Estado", title: "Estado" },
+                            { data: "Telefono", title: "Teléfono" },
+                            {
+                                data: "Estatus", title: "Estatus", render: function (data) {
+                                    return data ? '<span class="label label-success">Activo</span>' :
+                                        '<span class="label label-danger">Inactivo</span>';
+                                }
+                            },
+                            {
+                                data: "Id", render: function (data) {
+                                    return '<input type="button" value="Editar" class="btn btn-primary" onclick="EditCourt(' + data + ')" />'
+                                }
+                            }
+                        ]
+                    });
+            }
+            else {
+                alert(r.Message);
+            }
+        }, {});
+    }
+
+    function EditCourt(id) {
+        window.location.href = "/Court/Create/" + id;
+    }
+</script>

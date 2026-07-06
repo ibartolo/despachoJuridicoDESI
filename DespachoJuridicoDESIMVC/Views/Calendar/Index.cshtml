@@ -1,0 +1,457 @@
+﻿﻿@{
+    ViewBag.Title = "Calendario de Eventos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
+<style>
+    #calendar {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .fc-event-title {
+        font-weight: 600;
+    }
+
+    .fc-daygrid-event {
+        border-radius: 4px;
+        padding: 2px 4px;
+    }
+
+    .fc-event-tooltip {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 300px;
+    }
+
+    .modal-wide .modal-dialog {
+        width: 800px;
+        max-width: 95%;
+    }
+
+    .form-group.required label:after {
+        content: " *";
+        color: #e74c3c;
+    }
+
+    .char-counter {
+        font-size: 12px;
+        color: #999;
+        margin-top: 5px;
+    }
+
+    /* Loader de página */
+    #pageLoader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.85);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #pageLoader .spinner {
+        width: 60px;
+        height: 60px;
+        border: 6px solid #e1e5eb;
+        border-top-color: #3498db;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    #pageLoader p {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    @@keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+
+<!-- Loader de página -->
+<div id="pageLoader">
+    <div class="spinner"></div>
+    <p><i class="fa fa-calendar"></i> Cargando calendario...</p>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>Calendario de Eventos</h2>
+            <p class="page-subtitle">Visualización de eventos programados en el sistema</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="margin-bottom: 15px; text-align: right;">
+                        <button type="button" class="btn btn-success" id="btnNuevaCita">
+                            <i class="fa fa-plus"></i> Nueva Cita
+                        </button>
+                    </div>
+                    <div id='calendar'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Nueva Cita -->
+<div class="modal fade modal-wide" id="modalNuevaCita" tabindex="-1" role="dialog" aria-labelledby="modalNuevaCitaLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #2c3e50; color: white; border-radius: 6px 6px 0 0;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalNuevaCitaLabel">
+                    <i class="fa fa-calendar-plus-o"></i> Nueva Cita
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!-- Loading -->
+                <div id="loadingModal" style="text-align: center; padding: 30px; display: none;">
+                    <i class="fa fa-spinner fa-spin fa-3x" style="color: #3498db;"></i>
+                    <p style="margin-top: 15px;">Cargando datos...</p>
+                </div>
+
+                <!-- Formulario -->
+                <form id="frmAgenda" style="display: none;">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Título -->
+                    <div class="form-group required">
+                        <label for="Titulo">Título</label>
+                        <input type="text" class="form-control" id="Titulo" name="Titulo" placeholder="Ingresa el título de la cita" maxlength="250" required>
+                    </div>
+
+                    <!-- Caso (DDL) -->
+                    <div class="form-group required">
+                        <label for="CasoId">Caso</label>
+                        <select class="form-control" id="CasoId" name="CasoId" required>
+                            <option value="">Cargando casos...</option>
+                        </select>
+                    </div>
+
+                    <!-- Tipo de Evento (DDL) -->
+                    <div class="form-group required">
+                        <label for="TipoEventoId">Tipo de Evento</label>
+                        <select class="form-control" id="TipoEventoId" name="TipoEventoId" required>
+                            <option value="">Cargando tipos de evento...</option>
+                        </select>
+                    </div>
+
+                    <!-- Fecha Inicio -->
+                    <div class="form-group required">
+                        <label for="FechaInicio">Fecha y Hora de Inicio</label>
+                        <!-- VERSIÓN 1: datetime-local de HTML5 (descomentar para usar) -->
+                        <input type="datetime-local" class="form-control" id="FechaInicio" name="FechaInicio" required>
+                        <!-- VERSIÓN 2: Datepicker de Bootstrap (comentar/descomentar para probar)
+                        <div class="input-group date" id="datetimepicker">
+                            <input type="text" class="form-control" id="FechaInicio" name="FechaInicio" placeholder="DD/MM/YYYY HH:mm" required>
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        -->
+                    </div>
+
+                    <!-- Fecha Fin -->
+                    <div class="form-group">
+                        <label for="FechaFin">Fecha y Hora de Fin (Opcional)</label>
+                        <!-- VERSIÓN 1: datetime-local de HTML5 (descomentar para usar) -->
+                        <input type="datetime-local" class="form-control" id="FechaFin" name="FechaFin">
+                        <!-- VERSIÓN 2: Datepicker de Bootstrap (comentar/descomentar para probar)
+                        <div class="input-group date" id="datetimepickerFin">
+                            <input type="text" class="form-control" id="FechaFin" name="FechaFin" placeholder="DD/MM/YYYY HH:mm">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                        -->
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group">
+                        <label for="Descripcion">Descripción / Comentarios</label>
+                        <textarea class="form-control" id="Descripcion" name="Descripcion" rows="3" maxlength="500" placeholder="Comentarios adicionales sobre la cita..."></textarea>
+                        <div class="text-right char-counter">
+                            <span id="descripcionContador">0</span>/500 caracteres
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnGuardarCita">
+                    <i class="fa fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var calendar;
+    var casosCargados = false;
+    var eventTypesCargados = false;
+    var eventosCargados = false;
+
+    $(document).ready(function () {
+        // Mostrar loader de página al inicio
+        $('#pageLoader').show();
+
+        // Inicializar calendario
+        var calendarEl = document.getElementById('calendar');
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'es',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            initialView: 'timeGridWeek',
+            navLinks: true,
+            selectable: true,
+            selectMirror: true,
+            editable: true,
+            dayMaxEvents: true,
+            eventClick: function (arg) {
+                alert('Evento: ' + arg.event.title +
+                    '\nID: ' + arg.event.id +
+                    '\nInicio: ' + arg.event.start.toLocaleString() +
+                    (arg.event.end ? '\nFin: ' + arg.event.end.toLocaleString() : ''));
+            },
+            loading: function (isLoading) {
+                // Cuando el calendario está cargando, mostrar loader
+                if (isLoading) {
+                    $('#pageLoader').show();
+                } else {
+                    // Cuando termina de cargar, ocultar loader
+                    $('#pageLoader').hide();
+                }
+            },
+            events: function (fetchInfo, successCallback, failureCallback) {
+                // Obtener eventos desde el servidor
+                GetMVC("/Calendar/GetAllEvents", function (r) {
+                    if (r.Result.Successful) {
+                        successCallback(r.Events);
+                        // Ocultar loader cuando los eventos se cargan correctamente
+                        $('#pageLoader').hide();
+                    } else {
+                        failureCallback(r.Result.SystemMessages[0]?.Message || 'Error al cargar eventos');
+                        // Ocultar loader incluso en caso de error
+                        $('#pageLoader').hide();
+                        alert('Error al cargar los eventos: ' + (r.Result.SystemMessages[0]?.Message || 'Error desconocido'));
+                    }
+                });
+            }
+        });
+
+        calendar.render();
+
+        // Evento: Botón Nueva Cita
+        $('#btnNuevaCita').click(function () {
+            // Limpiar formulario
+            $('#frmAgenda')[0].reset();
+            $('#descripcionContador').text('0');
+
+            // Cargar DDLs
+            cargarDDLs();
+
+            // Abrir modal
+            $('#modalNuevaCita').modal('show');
+        });
+
+        // Evento: Contador de caracteres
+        $('#Descripcion').on('input', function () {
+            $('#descripcionContador').text($(this).val().length);
+        });
+
+        // Evento: Guardar Cita
+        $('#btnGuardarCita').click(function () {
+            guardarCita();
+        });
+
+        // Permitir guardar con Enter
+        $('#frmAgenda').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                guardarCita();
+            }
+        });
+
+        // Evento: Onblur para asignar fecha final automáticamente
+        $('#FechaInicio').on('blur', function () {
+            var fechaInicio = $(this).val();
+            if (fechaInicio) {
+                var fecha = new Date(fechaInicio);
+                fecha.setHours(fecha.getHours() + 1);
+
+                var año = fecha.getFullYear();
+                var mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                var dia = String(fecha.getDate()).padStart(2, '0');
+                var horas = String(fecha.getHours()).padStart(2, '0');
+                var minutos = String(fecha.getMinutes()).padStart(2, '0');
+
+                var fechaFin = año + '-' + mes + '-' + dia + 'T' + horas + ':' + minutos;
+
+                // Solo asignar si el campo de fecha fin está vacío
+                if (!$('#FechaFin').val()) {
+                    $('#FechaFin').val(fechaFin);
+                }
+            }
+        });
+    });
+
+    function cargarDDLs() {
+        // Mostrar loading dentro del modal
+        $('#loadingModal').show();
+        $('#frmAgenda').hide();
+
+        var casosCargadosLocal = false;
+        var eventTypesCargadosLocal = false;
+
+        // Cargar Casos
+        GetMVC("/Calendar/GetCases", function (r) {
+            if (r.Result.Successful) {
+                var $select = $('#CasoId');
+                $select.empty();
+                $select.append('<option value="">Seleccionar caso...</option>');
+
+                $.each(r.CaseObjs, function (i, item) {
+                    $select.append('<option value="' + item.Id + '">' + item.NumeroCaso + ' - ' + (item.Descripcion || 'Sin descripción') + '</option>');
+                });
+
+                casosCargadosLocal = true;
+            } else {
+                alert('Error al cargar casos: ' + (r.Result.SystemMessages[0]?.Message || 'Error desconocido'));
+            }
+            verificarCargaCompleta();
+        });
+
+        // Cargar Tipos de Evento
+        GetMVC("/Calendar/GetEventTypes", function (r) {
+            if (r.Result.Successful) {
+                var $select = $('#TipoEventoId');
+                $select.empty();
+                $select.append('<option value="">Seleccionar tipo de evento...</option>');
+
+                $.each(r.EventTypeObjs, function (i, item) {
+                    $select.append('<option value="' + item.Id + '">' + item.Nombre + (item.Descripcion ? ' - ' + item.Descripcion : '') + '</option>');
+                });
+
+                eventTypesCargadosLocal = true;
+            } else {
+                alert('Error al cargar tipos de evento: ' + (r.Result.SystemMessages[0]?.Message || 'Error desconocido'));
+            }
+            verificarCargaCompleta();
+        });
+
+        function verificarCargaCompleta() {
+            if (casosCargadosLocal && eventTypesCargadosLocal) {
+                // Ocultar loading y mostrar formulario
+                $('#loadingModal').hide();
+                $('#frmAgenda').show();
+
+                // Enfocar primer campo
+                $('#Titulo').focus();
+
+                // Agregar fecha/hora actual + 1 hora como predeterminada
+                var ahora = new Date();
+                ahora.setHours(ahora.getHours() + 1);
+                var año = ahora.getFullYear();
+                var mes = String(ahora.getMonth() + 1).padStart(2, '0');
+                var dia = String(ahora.getDate()).padStart(2, '0');
+                var horas = String(ahora.getHours()).padStart(2, '0');
+                var minutos = String(ahora.getMinutes()).padStart(2, '0');
+                $('#FechaInicio').val(año + '-' + mes + '-' + dia + 'T' + horas + ':' + minutos);
+            }
+        }
+    }
+
+    function guardarCita() {
+        // Validaciones básicas
+        var titulo = $('#Titulo').val().trim();
+        var casoId = $('#CasoId').val();
+        var tipoEventoId = $('#TipoEventoId').val();
+        var fechaInicio = $('#FechaInicio').val();
+
+        if (!titulo) {
+            alert('El título es obligatorio.');
+            $('#Titulo').focus();
+            return;
+        }
+
+        if (!casoId) {
+            alert('Debe seleccionar un caso.');
+            $('#CasoId').focus();
+            return;
+        }
+
+        if (!tipoEventoId) {
+            alert('Debe seleccionar un tipo de evento.');
+            $('#TipoEventoId').focus();
+            return;
+        }
+
+        if (!fechaInicio) {
+            alert('La fecha de inicio es obligatoria.');
+            $('#FechaInicio').focus();
+            return;
+        }
+
+        // Construir objeto
+        var agenda = {
+            Titulo: titulo,
+            CasoId: parseInt(casoId),
+            TipoEventoId: parseInt(tipoEventoId),
+            FechaInicio: fechaInicio,
+            FechaFin: $('#FechaFin').val() || null,
+            Descripcion: $('#Descripcion').val().trim() || null,
+            GoogleEventId: null,
+            SincronizadoGoogle: false,
+            FechaSincronizacion: null,
+            Estatus: true
+        };
+
+        // Mostrar loading en el botón
+        $('#btnGuardarCita').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
+
+        // Enviar al servidor
+        PostMVC("/Calendar/SaveOrUpdateAgenda", agenda, function (r) {
+            $('#btnGuardarCita').prop('disabled', false).html('<i class="fa fa-save"></i> Guardar');
+
+            if (r.success) {
+                alert(r.message);
+                // Cerrar modal
+                $('#modalNuevaCita').modal('hide');
+                // Refrescar calendario (esto mostrará el loader automáticamente)
+                calendar.refetchEvents();
+            } else {
+                alert(r.message);
+            }
+        });
+    }
+</script>
