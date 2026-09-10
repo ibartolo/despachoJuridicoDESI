@@ -34,8 +34,7 @@
                                 {
                                     @class = "form-control",
                                     @placeholder = "Ej: C-2023-001",
-                                    @maxlength = "100",
-                                    @readonly = Model.Id > 0 ? "readonly" : null
+                                    @maxlength = "100"
                                 })
                             </div>
                             @Html.ValidationMessageFor(x => x.NumeroCaso, "", new { @class = "text-danger" })

@@ -26,7 +26,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
                 return View(response.ClientObjs.FirstOrDefault());
             }
 
-            return View(new ClientObj());
+            return View(new ClienteObj ());
         }
         public ActionResult Index()
         {
@@ -44,7 +44,7 @@ namespace DespachoJuridicoDESIMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SaveOrUpdateCliente(ClientObj client)
+        public async Task<ActionResult> SaveOrUpdateCliente(ClienteObj client)
         {
             if (client == null)
             {
@@ -58,7 +58,13 @@ namespace DespachoJuridicoDESIMVC.Controllers
 
                 if (response?.Result?.Successful == true)
                 {
-                    return RedirectToAction("Create");
+                    // Si es un cliente nuevo (Id = 0), enviar notificación
+                    if (client.Id == 0 && IsValidEmail(client.Correo))
+                    {
+                        EnviarNotificacionAltaCliente(client);
+                    }
+
+                    return RedirectToAction("Index");
                 }
 
                 if (response?.Result?.SystemMessages != null && response.Result.SystemMessages.Any())
@@ -79,6 +85,41 @@ namespace DespachoJuridicoDESIMVC.Controllers
             }
 
             return View("Create", client);
+        }
+
+        /// <summary>
+        /// Envía notificación de alta de nuevo cliente
+        /// </summary>
+        private void EnviarNotificacionAltaCliente(ClienteObj client)
+        {
+            try
+            {
+                // Verificar que el cliente tenga un correo electrónico
+                if (string.IsNullOrEmpty(client.Correo))
+                {
+                    return;
+                }
+
+                // Leer el template del correo
+                var templatePath = HttpContext.Server.MapPath("~/Templates/Template_AltaUsuario.html");
+                var mensaje = System.IO.File.ReadAllText(templatePath);
+
+                // Reemplazar variables
+                mensaje = mensaje.Replace("{{NombreCliente}}", client.Nombre);
+                mensaje = mensaje.Replace("{{CorreoCliente}}", client.Correo);
+                mensaje = mensaje.Replace("{{TelefonoCliente}}", client.Telefono);
+
+                // Preparar destinatarios
+                var para = new List<string> { client.Correo };
+
+                // Enviar correo
+                EmailHelper.EnvioEmaiil(para, "Bienvenido al Despacho Jurídico Salas y Asociados", mensaje);
+            }
+            catch (Exception ex)
+            {
+                // Registrar error pero no interrumpir el flujo
+                System.Diagnostics.Debug.WriteLine($"Error al enviar correo de alta de cliente: {ex.Message}");
+            }
         }
         #endregion
     }

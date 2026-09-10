@@ -54,7 +54,7 @@
             <!-- Perfil de usuario -->
             <div class="dropdown">
                 <div class="user-profile dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="user-avatar">AJ</div>
+                    <!--<div class="user-avatar">AJ</div>-->
                     <span class="user-name">@DespachoJuridicoDESIMVC.Helpers.SessionHelper.GetSessionUser().UserName.Split(new char[] { '@' })[0]</span>
                     <i class="fa fa-caret-down"></i>
                 </div>
@@ -75,7 +75,7 @@
     <div class="sidebar" id="sidebar">
         <ul class="sidebar-menu">
             <li class="active">
-                <a href="#">
+                <a href="/Home/Index">
                     <i class="fa fa-dashboard"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
@@ -84,29 +84,35 @@
                 <a href="/Case/Index">
                     <i class="fa fa-gavel"></i>
                     <span class="menu-text">Casos</span>
-                    <span class="badge">5</span>
+                    <!--<span class="badge">5</span>-->
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="/Record/Index">
                     <i class="fa fa-folder-open"></i>
                     <span class="menu-text">Expedientes</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Court")">
+                    <i class="fa fa-building"></i>
+                    <span class="menu-text">Juzgados</span>
                 </a>
             </li>
             <li>
                 <a href="/Customer/Index">
                     <i class="fa fa-users"></i>
                     <span class="menu-text">Clientes</span>
-                    <span class="badge">12</span>
+                    <!--<span class="badge">12</span>-->
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="/Calendar/Index">
                     <i class="fa fa-calendar"></i>
-                    <span class="menu-text">Agenda</span>
+                    <span class="menu-text">Calendario</span>
                 </a>
             </li>
-            <li>
+            <!--<li>
                 <a href="#">
                     <i class="fa fa-credit-card"></i>
                     <span class="menu-text">Pagos</span>
@@ -123,7 +129,7 @@
                     <i class="fa fa-cogs"></i>
                     <span class="menu-text">Configuración</span>
                 </a>
-            </li>
+            </li>-->
         </ul>
     </div>
 

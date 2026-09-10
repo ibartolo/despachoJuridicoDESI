@@ -14,12 +14,6 @@ namespace DespachoJuridicoDESIWebApi.App_Start
             config.EnableSwagger(c =>
             {
                 c.SingleApiVersion("v1", "DespachoJuridicoDESIWebApi Web API");
-                //c.Description("API para reportes de incidencias");
-                var xmlPath = XmlCommentsFilePath();
-                if (!string.IsNullOrEmpty(xmlPath))
-                {
-                    c.IncludeXmlComments(xmlPath);
-                }
                 c.IgnoreObsoleteActions();
             })
             .EnableSwaggerUi(c =>
@@ -27,21 +21,6 @@ namespace DespachoJuridicoDESIWebApi.App_Start
                 // Agrega un campo para Authorization header (Bearer token)
                 c.EnableApiKeySupport("Authorization", "header");
             });
-        }
-
-        private static string XmlCommentsFilePath()
-        {
-            try
-            {
-                var basePath = AppDomain.CurrentDomain.BaseDirectory;
-                var fileName = "DespachoJuridicoDESIWebApi.xml";
-                var full = Path.Combine(basePath, "bin", fileName);
-                return File.Exists(full) ? full : null;
-            }
-            catch
-            {
-                return null;
-            }
         }
     }
 }

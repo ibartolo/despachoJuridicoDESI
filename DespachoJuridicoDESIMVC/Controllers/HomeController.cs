@@ -1,6 +1,7 @@
 ﻿using DespachoJuridicoDESIMVC.DAL;
 using DespachoJuridicoDESIMVC.Helpers;
 using DespachoJuridicoDESIMVC.Models.Autentication;
+using DespachoJuridicoDESIMVC.Models.Dashboard;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,18 @@ namespace DespachoJuridicoDESIMVC.Controllers
             return View();
         }
         [Autenticated]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var response = await httpClient.GetDashboardData();
+
+            if (response?.Result?.Successful == true)
+            {
+                return View(response.Dashboard);
+            }
+
+            // En caso de error, mostrar dashboard vacío
+            ViewBag.Error = response?.Result?.SystemMessages?.FirstOrDefault()?.Message ?? "Error al cargar el dashboard";
+            return View(new DashboardObj());
         }
         #endregion
 

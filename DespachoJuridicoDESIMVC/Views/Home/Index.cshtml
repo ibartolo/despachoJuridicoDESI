@@ -1,6 +1,6 @@
-﻿
+﻿﻿@model DespachoJuridicoDESIMVC.Models.Dashboard.DashboardObj
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,34 +9,34 @@
     <div class="row row-spacing">
         <div class="col-md-3 col-sm-6">
             <div class="stat-card casos">
-                <div class="stat-number">24</div>
+                <div class="stat-number">@Model.Summary.CasosActivos</div>
                 <div class="stat-label">Casos Activos</div>
                 <div class="stat-change positive">
-                    <i class="fa fa-arrow-up"></i> 3 nuevos esta semana
+                    <i class="fa fa-arrow-up"></i> @Model.Summary.NuevosCasosSemana nuevos esta semana
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
             <div class="stat-card expedientes">
-                <div class="stat-number">142</div>
+                <div class="stat-number">@Model.Summary.ExpedientesTotales</div>
                 <div class="stat-label">Expedientes</div>
                 <div class="stat-change positive">
-                    <i class="fa fa-arrow-up"></i> 8% vs mes anterior
+                    <i class="fa fa-arrow-up"></i> @Model.Summary.ExpedientesTotales% vs mes anterior
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
             <div class="stat-card clientes">
-                <div class="stat-number">58</div>
+                <div class="stat-number">@Model.Summary.ClientesActivos</div>
                 <div class="stat-label">Clientes Activos</div>
                 <div class="stat-change positive">
-                    <i class="fa fa-arrow-up"></i> 5 nuevos este mes
+                    <i class="fa fa-arrow-up"></i> @Model.Summary.NuevosClientesMes nuevos este mes
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
             <div class="stat-card pagos">
-                <div class="stat-number">$124,580</div>
+                <div class="stat-number">$@Model.Summary.IngresosTotales.ToString("N0")</div>
                 <div class="stat-label">Ingresos Totales</div>
                 <div class="stat-change positive">
                     <i class="fa fa-arrow-up"></i> 12% vs mes anterior
@@ -45,66 +45,45 @@
         </div>
     </div>
 
-    <!-- Fila de actividades y calendario -->
+    <!-- Fila de actividades y próximos eventos -->
     <div class="row row-spacing">
         <div class="col-md-8">
             <h3 class="section-title">Actividad Reciente</h3>
             <div class="activity-list">
-                <div class="activity-item">
-                    <div class="activity-icon case">
-                        <i class="fa fa-gavel"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-text">
-                            <strong>Nuevo caso asignado:</strong> "Contrato de arrendamiento - Inmobiliaria Sol"
+                @if (Model.RecentActivities != null && Model.RecentActivities.Any())
+                {
+                    foreach (var activity in Model.RecentActivities)
+                    {
+                        var iconClass = activity.Actividad == "Nuevo caso" ? "case" :
+                                        activity.Actividad == "Nuevo cliente" ? "client" :
+                                        activity.Actividad == "Pago recibido" ? "payment" : "case";
+                        var icon = activity.Actividad == "Nuevo caso" ? "fa-gavel" :
+                                   activity.Actividad == "Nuevo cliente" ? "fa-user-plus" :
+                                   activity.Actividad == "Pago recibido" ? "fa-credit-card" : "fa-file-text";
+
+                        <div class="activity-item">
+                            <div class="activity-icon @iconClass">
+                                <i class="fa @icon"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-text">
+                                    <strong>@activity.Actividad:</strong> "@activity.Referencia" - @activity.Detalle
+                                </div>
+                                <div class="activity-time">@activity.Fecha.ToString("dd/MM/yyyy HH:mm")</div>
+                            </div>
                         </div>
-                        <div class="activity-time">Hace 2 horas</div>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon client">
-                        <i class="fa fa-user-plus"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-text">
-                            <strong>Nuevo cliente registrado:</strong> María González Rodríguez
+                    }
+                }
+                else
+                {
+                    <div class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-text">
+                                <span style="color: #999;">No hay actividad reciente</span>
+                            </div>
                         </div>
-                        <div class="activity-time">Ayer, 15:30</div>
                     </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon payment">
-                        <i class="fa fa-credit-card"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-text">
-                            <strong>Pago recibido:</strong> $5,800 del caso "Divorcio López-Martínez"
-                        </div>
-                        <div class="activity-time">Ayer, 11:15</div>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon calendar">
-                        <i class="fa fa-calendar-check-o"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-text">
-                            <strong>Audiencia programada:</strong> Juicio laboral "Martínez vs. Empresa XYZ"
-                        </div>
-                        <div class="activity-time">25 de octubre, 10:00 AM</div>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon case">
-                        <i class="fa fa-file-text"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-text">
-                            <strong>Documento subido:</strong> Escrito de demanda "Contrato de servicios"
-                        </div>
-                        <div class="activity-time">23 de octubre, 16:45</div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
 
@@ -112,80 +91,52 @@
             <h3 class="section-title">Próximos Eventos</h3>
             <div class="calendar-card">
                 <div class="calendar-header">
-                    <h4 class="calendar-month">Octubre 2023</h4>
+                    <h4 class="calendar-month">@DateTime.Now.ToString("MMMM yyyy")</h4>
                 </div>
                 <div class="calendar-body">
-                    <div class="event-item">
-                        <div class="event-time">10:00 AM</div>
-                        <div class="event-title">Reunión con cliente: Carlos Ruiz</div>
-                        <div class="event-desc">Discusión de estrategia para caso de propiedad intelectual</div>
-                    </div>
-                    <div class="event-item">
-                        <div class="event-time">02:30 PM</div>
-                        <div class="event-title">Audiencia: Juicio laboral</div>
-                        <div class="event-desc">Tribunal laboral local - Caso Martínez vs. Empresa XYZ</div>
-                    </div>
-                    <div class="event-item">
-                        <div class="event-time">04:00 PM</div>
-                        <div class="event-title">Fecha límite: Documentación</div>
-                        <div class="event-desc">Entrega de documentos para caso de divorcio López-Martínez</div>
-                    </div>
-                    <div class="event-item">
-                        <div class="event-time">Mañana, 09:00 AM</div>
-                        <div class="event-title">Revisión de contratos</div>
-                        <div class="event-desc">Análisis de contratos para nueva empresa cliente</div>
-                    </div>
+                    @if (Model.UpcomingEvents != null && Model.UpcomingEvents.Any())
+                    {
+                        foreach (var evt in Model.UpcomingEvents)
+                        {
+                            <div class="event-item">
+                                <div class="event-time">@evt.FechaInicio.ToString("hh:mm tt")</div>
+                                <div class="event-title">@evt.Titulo</div>
+                                <div class="event-desc">@evt.CasoNumero - @evt.TipoEvento</div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="event-item">
+                            <div class="event-desc" style="text-align: center; color: #999;">No hay eventos próximos</div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <!-- JavaScript Específico para Dashboard -->
 <script>
-        /* ===================================
-           JAVASCRIPT ESPECÍFICO PARA DASHBOARD
-           =================================== */
+    /* ===================================
+       JAVASCRIPT ESPECÍFICO PARA DASHBOARD
+       =================================== */
 
-        $(document).ready(function () {
-            // Efecto hover en tarjetas de estadísticas
-            $('.stat-card').hover(
-                function () {
-                    $(this).css('cursor', 'pointer');
-                },
-                function () {
-                    // Sin acción al salir
-                }
-            );
-
-            // Simular datos en tiempo real para las estadísticas
-            function updateStats() {
-                // En una implementación real, aquí se haría una llamada AJAX
-                // para obtener datos actualizados del servidor
-
-                // Simulación de cambio en datos
-                const randomChange = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
-                const currentCases = parseInt($('.stat-card.casos .stat-number').text());
-
-                if (randomChange !== 0 && Math.random() > 0.7) {
-                    // Simular cambio ocasional en casos activos
-                    const newCases = Math.max(0, currentCases + randomChange);
-                    $('.stat-card.casos .stat-number').text(newCases);
-
-                    // Actualizar texto de cambio
-                    const changeText = randomChange > 0 ?
-                        `<i class="fa fa-arrow-up"></i> ${randomChange} nuevo(s) recientemente` :
-                        `<i class="fa fa-arrow-down"></i> ${Math.abs(randomChange)} cerrado(s)`;
-
-                    $('.stat-card.casos .stat-change').html(changeText);
-                }
+    $(document).ready(function () {
+        // Efecto hover en tarjetas de estadísticas
+        $('.stat-card').hover(
+            function () {
+                $(this).css('cursor', 'pointer');
+            },
+            function () {
+                // Sin acción al salir
             }
+        );
 
-            // Actualizar estadísticas cada 30 segundos (simulación)
-            setInterval(updateStats, 30000);
-
-            // Mostrar mensaje de bienvenida
-            setTimeout(function () {
-                console.log("Dashboard cargado correctamente. Bienvenido al sistema de gestión del despacho jurídico.");
-            }, 1000);
-        });
+        // Mostrar mensaje de bienvenida
+        setTimeout(function () {
+            console.log("Dashboard cargado correctamente. Bienvenido al sistema de gestión del despacho jurídico.");
+        }, 1000);
+    });
 </script>

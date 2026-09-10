@@ -9,7 +9,7 @@ namespace DespachoJuridicoDESIMVC.Models.Messages
 {
     public class ClientMassagesResponse
     {
-        public List<ClientObj> ClientObjs { get; set; }
+        public List<ClienteObj > ClientObjs { get; set; }
         public OperationResult Result { get; set; }
     }
 
@@ -31,6 +31,6 @@ namespace DespachoJuridicoDESIMVC.Models.Messages
 
     public class SaveOrUpdateClienteRequest
     {
-        public ClientObj Cliente { get; set; }
+        public ClienteObj  Cliente { get; set; }
     }
 }

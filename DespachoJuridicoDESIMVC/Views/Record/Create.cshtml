@@ -1,0 +1,152 @@
+﻿﻿@model DespachoJuridicoDESIMVC.Models.Record.RecordObj
+@{
+    ViewBag.Title = "Creación de expedientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>@(Model.Id > 0 ? "Editar Expediente" : "Nuevo Expediente")</h2>
+            <p class="page-subtitle">@(Model.Id > 0 ? "Modificar información del expediente" : "Registrar nuevo expediente")</p>
+        </div>
+
+        @using (Html.BeginForm("SaveOrUpdateRecord", "Record", FormMethod.Post, new { @id = "frmRecordCrud" }))
+        {
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.CreatedBy)
+            @Html.HiddenFor(x => x.CreatedDt)
+            @Html.HiddenFor(x => x.UpdatedBy)
+            @Html.HiddenFor(x => x.UpdatedDt)
+            @Html.HiddenFor(x => x.Status)
+
+            <!-- Sección Información Básica -->
+            <div class="form-section">
+                <h3 class="section-title">Información del Expediente</h3>
+
+                <div class="row">
+                    <!-- Caso (DDL) -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Número de Caso *</label>
+                            <div class="input-icon">
+                                @Html.DropDownListFor(x => x.Case.Id, (IEnumerable<SelectListItem>)ViewBag.Cases, "Seleccionar caso...", new { @class = "form-control" })
+                            </div>
+                            @Html.ValidationMessageFor(x => x.Case.Id, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <!-- Número de Expediente -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Número de Expediente *</label>
+                            @Html.TextBoxFor(x => x.RecordNumber, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Ej: EXP-2023-001",
+                                @maxlength = "100"
+                            })
+                            @Html.ValidationMessageFor(x => x.RecordNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <!-- Juzgado -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Juzgado *</label>
+                            <div class="input-icon">
+                                @Html.DropDownListFor(x => x.Court.Id, (IEnumerable<SelectListItem>)ViewBag.Courts, "Seleccionar juzgado...", new { @class = "form-control" })
+                            </div>
+                            @Html.ValidationMessageFor(x => x.Court.Id, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comentarios -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Comentarios</label>
+                            @Html.TextAreaFor(x => x.Comentarios, new
+                            {
+                                @class = "form-control",
+                                @placeholder = "Comentarios adicionales sobre el expediente...",
+                                @rows = "5",
+                                @maxlength = "500"
+                            })
+                            <div class="text-right char-counter">
+                                <span id="comentariosContador">@(Model.Comentarios?.Length ?? 0)</span>/500 caracteres
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="form-actions">
+                <a href="@Url.Action("Index", "Record")" class="btn btn-default">
+                    <i class="fa fa-times"></i> Cancelar
+                </a>
+                @if (Model.Id > 0)
+                {
+                    <button type="button" class="btn btn-danger" id="btnEliminar" data-id="@Model.Id">
+                        <i class="fa fa-trash"></i> Eliminar
+                    </button>
+                }
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save"></i> @(Model.Id > 0 ? "Actualizar" : "Guardar")
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<script>
+    $(function () {
+        // Contador de caracteres para comentarios
+        $('#Comentarios').on('input', function () {
+            $('#comentariosContador').text($(this).val().length);
+        });
+
+        // Validación del formulario
+        $("#frmRecordCrud").validate({
+            rules: {
+                "Case.Id": "required",
+                "RecordNumber": "required",
+                "Court.Id": "required"
+            },
+            messages: {
+                "Case.Id": "Debe seleccionar un caso",
+                "RecordNumber": "El número de expediente es requerido",
+                "Court.Id": "Debe seleccionar un juzgado"
+            },
+            errorClass: "text-danger",
+            errorElement: "span"
+        });
+
+        // Eliminar expediente
+        $('#btnEliminar').click(function () {
+            if (confirm('¿Está seguro de eliminar este expediente? Esta acción no se puede deshacer.')) {
+                const id = $(this).data('id');
+
+                $.ajax({
+                    url: '@Url.Action("DeleteRecord", "Record")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.href = '@Url.Action("Index", "Record")';
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error al eliminar el expediente');
+                    }
+                });
+            }
+        });
+    });
+</script>

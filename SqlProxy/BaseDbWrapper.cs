@@ -219,5 +219,35 @@ namespace SqlProxy
             return dt;
         }
         #endregion
+
+        protected DataSet GetDataSet(string cmdText) =>
+    GetDataSet(cmdText, CommandType.StoredProcedure, Enumerable.Empty<SqlParameter>());
+
+        protected DataSet GetDataSet(string cmdText, CommandType cmdType) =>
+            GetDataSet(cmdText, cmdType, Enumerable.Empty<SqlParameter>());
+
+        protected DataSet GetDataSet(string cmdText, CommandType cmdType, IEnumerable<SqlParameter> sqlParameters)
+        {
+            var ds = new DataSet();
+
+            using (var sqlConnection = new SqlConnection(SQLConnectionString))
+            {
+                sqlConnection.Open();
+                using (var sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandTimeout = (int)SQLCommandTimeOut.TotalSeconds;
+                    sqlCommand.CommandText = cmdText;
+                    sqlCommand.CommandType = cmdType;
+                    sqlCommand.Parameters.AddRange(sqlParameters?.ToArray() ?? Enumerable.Empty<SqlParameter>().ToArray());
+
+                    using (var adapter = new SqlDataAdapter(sqlCommand))
+                    {
+                        adapter.Fill(ds);
+                    }
+                }
+            }
+
+            return ds;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DespachoJuridicoDESIMVC.Models.Case;
+﻿using DespachoJuridicoDESIMVC.Helpers;
+using DespachoJuridicoDESIMVC.Models.Case;
 using DespachoJuridicoDESIMVC.Models.Messages;
 using Newtonsoft.Json;
 using System;
@@ -93,7 +94,32 @@ namespace DespachoJuridicoDESIMVC.Controllers
                 var response = await httpClient.SaveOrUpdateCase(caseObj);
                 if (response?.Result?.Successful == true)
                 {
-                    return RedirectToAction("Create");
+                    var clienteResponse = await httpClient.GetClienteById(caseObj.Cliente.Id);
+                    
+                    // Si es un caso nuevo (Id = 0), enviar notificación
+                    if (caseObj.Id == 0 && caseObj.Cliente != null && IsValidEmail(clienteResponse.ClientObjs.First()?.Correo))
+                    {
+                        try
+                        {
+                            var templatePath = Server.MapPath("~/Templates/Template_RegistroCaso.html");
+                            var mensaje = System.IO.File.ReadAllText(templatePath);
+
+                            mensaje = mensaje.Replace("{{NombreCliente}}", caseObj.Cliente.Nombre);
+                            mensaje = mensaje.Replace("{{NumeroCaso}}", caseObj.NumeroCaso);
+                            mensaje = mensaje.Replace("{{DescripcionCaso}}", caseObj.Descripcion ?? "Sin descripción");
+                            mensaje = mensaje.Replace("{{EstatusCaso}}", caseObj.Estatus ? "Activo" : "Inactivo");
+                            mensaje = mensaje.Replace("{{AbogadoAsignado}}", SessionHelper.GetSessionUser()?.UserName ?? "Asignado");
+
+                            var para = new List<string> { clienteResponse.ClientObjs.First()?.Correo };
+                            EmailHelper.EnvioEmaiil(para, $"Notificación de Caso - {caseObj.NumeroCaso}", mensaje);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Error al enviar correo: {ex.Message}");
+                        }
+                    }
+
+                    return RedirectToAction("Index");
                 }
                 if (response?.Result?.SystemMessages != null && response.Result.SystemMessages.Any())
                 {

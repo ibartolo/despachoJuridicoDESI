@@ -1,0 +1,75 @@
+﻿﻿@{
+    ViewBag.Title = "Visor de expedientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/2.3.7/js/dataTables.js"></script>
+
+<div class="row">
+    <div class="col-md-12">
+        <a href="/Record/Create" class="btn btn-success">Nuevo Expediente</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table" id="tblRecords">
+        </table>
+    </div>
+</div>
+
+<script>
+    var tbl;
+    var arrayItems;
+
+    $(document).ready(function () {
+        GetAllRecords();
+    });
+
+    function GetAllRecords() {
+        GetMVC("/Record/GetAllRecords", function (r) {
+            if (r.Result.Successful) {
+                arrayItems = r.RecordObjs;
+                tbl = $("#tblRecords").DataTable(
+                    {
+                        data: arrayItems,
+                        columns: [
+                            { data: "Id", title: "Id" },
+                            { data: "RecordNumber", title: "Número de Expediente" },
+                            { data: "Case.NumeroCaso", title: "Número de Caso" },
+                            { data: "Court.Nombre", title: "Juzgado" },
+                            {
+                                data: "Comentarios",
+                                title: "Comentarios",
+                                render: function (data) {
+                                    if (!data) return '-';
+                                    if (data.length > 50) {
+                                        return '<span title="' + data + '">' + data.substring(0, 50) + '...</span>';
+                                    }
+                                    return data;
+                                }
+                            },
+                            {
+                                data: "Status", title: "Estatus", render: function (data) {
+                                    return data ? '<span class="label label-success">Activo</span>' :
+                                        '<span class="label label-danger">Inactivo</span>';
+                                }
+                            },
+                            {
+                                data: "Id", render: function (data) {
+                                    return '<input type="button" value="Editar" class="btn btn-primary" onclick="EditRecord(' + data + ')" />'
+                                }
+                            }
+                        ]
+                    });
+            }
+            else {
+                alert(r.Message);
+            }
+        }, {});
+    }
+
+    function EditRecord(id) {
+        window.location.href = "/Record/Create/" + id;
+    }
+</script>
